@@ -21,14 +21,8 @@ testB = Nigger()
 testB.jjlen = 100
 testB.name = 'Michael'
 testB.age = "111"
+testB.ana = 'fes'
 
 testC = White()
 testC.name = "Alice"
-print(testC.a)
-
-print(dir(Human))
-print(dir(White))
-print(dir(Nigger))
-print(Human.__slots__)
-print(White.__slots__)
-print(Nigger.__slots__)
+testC.fewfq = 'fdew'
