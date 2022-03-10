@@ -6,6 +6,7 @@ class Nigger(Human):
     __slots__ = 'jjlen'
 
 class White(Human):
+
     pass
 
 testA = White()
@@ -15,7 +16,7 @@ testB = Nigger()
 testB.jjlen = 100
 testB.name = 'Michael'
 testB.age = "111"
-testB.ana = 'fes'
+# testB.ana = 'fes'
 
 testC = White()
 testC.name = "Alice"
