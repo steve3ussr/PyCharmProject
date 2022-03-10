@@ -1,7 +1,7 @@
 class Student(object):
 
     def __init__(self, k):
-        self._value = k
+        self.value = k
 
     @property
     def value(self):
