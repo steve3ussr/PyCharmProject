@@ -1,4 +1,5 @@
 import sys
+from collections.abc import Generator, Iterator, Iterable
 
 
 def yanghui(maxit):
@@ -12,6 +13,7 @@ def yanghui(maxit):
 
 
 yh_test = yanghui(10)
+print(isinstance(yh_test, Generator))
 while True:
     try:
         print(next(yh_test))
