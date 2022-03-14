@@ -1,1 +1,1 @@
-assert 3%2 == 0, 'fool'
+assert 3 % 2 == 0, 'fool'
