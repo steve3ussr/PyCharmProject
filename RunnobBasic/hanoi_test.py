@@ -9,6 +9,7 @@ def hanoi_move(n, origin, dest):
         cnt += 1
         print(f'{cnt}: {origin} --> {dest}')
         hanoi_move(n-1, mid, dest)
+    return
 
 
 cnt = 0
