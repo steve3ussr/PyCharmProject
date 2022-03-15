@@ -33,18 +33,13 @@
 
 
 我觉得最大的问题是我已经忘了链表怎么操作了。
-1. 新建：a = ListNode(0)
-2. 最后返回头指针，因此先新建一个，然后令ans = a，再对ans进行赋值；
-3. 给a.val赋值后，通过a.next = ListNode(0)来续上一个,或者返回一个0；
-4. a = a.next移动到下一格
+
+思路：
+1. 正常情况下：l1 = l1.next
+2. 如果l1是最后一个，那next之后就是None
+3. 外循环用l1 l2是否为None判断是否结束
+4. 如果l1已经是None，那在取值时就返回0
 
 ![](https://i.imgur.com/Lhsm4Wn.png)
 
-分几种情况：
-1. next都是None，说明该结束了；
-2. next都不是None，正常；
-3. 有1个None，补全或者返回0
-
-改进：
-bool(None) = False，可以简化代码
 
