@@ -24,3 +24,26 @@
        所以再后面做了校验，
 
 看评论区里一个比较好的方法是用**Hash Table**，但是我不知道这是啥。尽管如此，我的运行时间也在最快的那一批里。
+但Hashmap确实香。
+
+# 2 addTwoNumbers
+
+题目描述：
+
+
+
+我觉得最大的问题是我已经忘了链表怎么操作了。
+1. 新建：a = ListNode(0)
+2. 最后返回头指针，因此先新建一个，然后令ans = a，再对ans进行赋值；
+3. 给a.val赋值后，通过a.next = ListNode(0)来续上一个,或者返回一个0；
+4. a = a.next移动到下一格
+
+![](https://i.imgur.com/Lhsm4Wn.png)
+
+分几种情况：
+1. next都是None，说明该结束了；
+2. next都不是None，正常；
+3. 有1个None，补全或者返回0
+
+改进：
+bool(None) = False，可以简化代码
