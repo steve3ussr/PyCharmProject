@@ -43,3 +43,18 @@
 ![](https://i.imgur.com/Lhsm4Wn.png)
 
 
+# lengthOfLongestSubstring
+
+![](https://i.imgur.com/u98iTeq.png)
+
+1. 用hashmap加快速度，减少一个O(n)；
+2. win和start代表窗口长度和起始点
+3. case1： 新元素不在map中，win++
+4. case2：新元素在map中，查找map中重复元素的index
+   - 在index >= start的情况下：
+     - 减小win
+     - 改变start
+5. 这两个case必然改变win，在每次循环后取softmax
+6. 这两个case之后必然改变map，不管是增加还是修改键值
+
+
