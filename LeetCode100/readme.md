@@ -43,7 +43,7 @@
 ![](https://i.imgur.com/Lhsm4Wn.png)
 
 
-# lengthOfLongestSubstring
+# 3 lengthOfLongestSubstring
 
 ![](https://i.imgur.com/u98iTeq.png)
 
@@ -57,4 +57,11 @@
 5. 这两个case必然改变win，在每次循环后取softmax
 6. 这两个case之后必然改变map，不管是增加还是修改键值
 
+# 4 findMedianSortedArrays
+
+1. 问题转化为寻找第k小的元素，k>=1
+2. 分三种exit情况：列表为空，或者k==1时返回第一个元素的最小值
+3. 比较两个列表的第k//2个值，小的一方可排除前k//2个值
+4. 3中有可能指针越界，但总的来说要让两个列表中待排除的元素数量a和b之和为k，所以让其中一个为最大值
+5. 操他妈的，为什么python build in 的sort最快
 

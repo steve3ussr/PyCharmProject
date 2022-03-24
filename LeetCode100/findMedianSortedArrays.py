@@ -1,38 +1,49 @@
 class Solution:
     def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
-        def insert(num, list_, start, end):
-            if start == end:
-                if num <= list_[start]:
-                    list_.insert(start, num)
-                else:
-                    list_.insert(start + 1, num)
-                return
-            else:  # length//2 >= 1
-                length = end - start + 1
-                if num > list_[start + length // 2 - 1]:
-                    return insert(num, list_, start + length // 2, end)
-                else:
-                    return insert(num, list_, start, start + length // 2 - 1)
+        def findmid(list1, list2, k):
+            if not list1:  # nums1 = []
+                return list2[k-1]
+            elif not list2:  # nums2 = []
+                return list1[k-1]
+            elif k == 1:
+                return min(list1[0], list2[0])
 
-        def mid_num(a_list):
-            if len(a_list) % 2 > 0:
-                return a_list[(len(a_list) // 2)]
             else:
-                return (a_list[len(a_list) // 2] + a_list[len(a_list) // 2 - 1]) / 2
+                pass
 
-        if len(nums1) == 0:
-            return mid_num(nums2)
-        elif len(nums2) == 0:
-            return mid_num(nums1)
+            if len(list1) < k//2:
+                a = len(list1)
+                b = k - a
+            elif len(list2) < k//2:
+                b = len(list2)
+                a = k - b
+            else:
+                a = b = k // 2
+
+            if list1[a - 1] >= list2[b - 1]:
+                list2 = list2[b:]
+                k -= b
+            else:
+                list1 = list1[a:]
+                k -= a
+            print(list1, list2, k)
+            return findmid(list1, list2, k)
+
+        m = len(nums1)
+        n = len(nums2)
+        if (m + n) % 2:
+            t1 = t2 = (m + n) // 2+1
         else:
-            for var_ in nums2:
-                insert(var_, nums1, 0, len(nums1)-1)
-
-        print(nums1)
-        return mid_num(nums1)
+            t1 = (m + n) // 2+1
+            t2 = t1 - 1
+        print(t1, t2)
+        v1 = findmid(k1 := nums1, k2 := nums2, t1)
+        v2 = findmid(k1 := nums1, k2 := nums2, t2)
+        print(v1, v2)
+        return (v1 + v2) / 2
 
 
 a = [1]
-b = []
+b = [2, 3]
 mid = Solution().findMedianSortedArrays(a, b)
 print(mid)
