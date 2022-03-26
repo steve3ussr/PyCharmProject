@@ -1,34 +1,32 @@
 class Solution:
-    def longestPalindrome(self, s: str) -> (str, int, int):
+    def longestPalindrome(self, s: str) -> str:
+        ans_length = 0
+        ans_left = None
+        ans_right = None
 
-
-        imax = 0
-        jmax = 0
-        length = 1
-        i = 0
-        while i <= len(s)-1:
-            j = 0.5 if i % 1 else 1
-
+        def extender(a_str, left, right):
             while True:
-                if i-j < 0 or i+j == len(s):
-                    break
-                if s[int(i-j)] == s[int(i+j)]:
-                    j += 1
+                if left < 0 or right == len(a_str) or a_str[left] != a_str[right]:
+                    return left+1, right-left-1
                 else:
-                    break
+                    left -= 1
+                    right += 1
 
-            length_local = 2*j-1
-            if 2*j-1 > length:
-                jmax = j
-                imax = i
-                length = length_local
+        for i in range(len(s)):
+            l_local, length_local = extender(s, i, i)
+            if length_local > ans_length:
+                ans_left = l_local
+                ans_length = length_local
 
-            i += 0.5
+            l_local, length_local = extender(s, i, i+1)
+            if length_local > ans_length:
+                ans_left = l_local
+                ans_length = length_local
 
-        return s[int(imax-jmax+1):int(imax+jmax)] if jmax != 0 else s[0]
+        return s[ans_left:ans_left + ans_length]
 
 
-a_str = 'aba'
+a_str = 'abbq'
 #a_str = 'cbbd'
 #a_str = '1321344412'
 res = Solution().longestPalindrome(a_str)
