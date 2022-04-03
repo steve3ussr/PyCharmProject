@@ -1,10 +1,9 @@
-from pythonds.basic.Stack import Stack
-
-
 def bracket_test(s):
+
     """
     只在字符串里匹配圆括号，语法正确就T，否则False
     """
+    from pythonds.basic.Stack import Stack
     bracket = Stack()
     cnt = 0
     for i in range(len(s)):

@@ -23,3 +23,7 @@ class Stack(object):
     def __str__(self):
         return f"{self.content}"
 
+
+if __name__ == '__main__':
+    s = Stack()
+    print(s.peek())
