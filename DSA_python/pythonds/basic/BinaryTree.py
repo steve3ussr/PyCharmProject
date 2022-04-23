@@ -37,8 +37,6 @@ class BinaryTree(object):
     def getRootVal(self):
         return self.key
 
-    
-
 
 if __name__ == '__main__':
     r = BinaryTree(5)
