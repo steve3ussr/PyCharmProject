@@ -77,11 +77,56 @@ class Unorderlist(object):
         temp_node.data = new_data
         current.next = temp_node
 
-    def insert(self, new_data, i): pass
+    def insert(self, new_data, target_index):
+        if target_index == 0:
+            self.add(new_data)
+        elif target_index == self.length():
+            self.append(new_data)
+        elif target_index > self.length() or target_index < 0:
+            raise IndexError('over the boundary')
+        else:
+            current = self.head
+            last = None
+            cnt = 0
+            temp_node = Node()
+            temp_node.data = new_data
+            while cnt != target_index:
+                cnt += 1
+                last = current
+                current = current.next
+            last.next = temp_node
+            temp_node.next = current
 
-    def index(self, a_data): pass
+    def index(self, target_index):
+        if target_index < self.length():
+            temp = self.head
+            cnt = 0
+            while cnt != target_index:
+                cnt += 1
+                temp = temp.next
+            return temp.data
+        else:
+            raise IndexError('over the boundary')
 
-    def pop(self): pass
+    def pop(self, *target_index):
+        if target_index == ():
+            target_index = self.length()-1
+
+        if 0 <= target_index <= self.length()-1:
+            current = self.head
+            last = None
+            if target_index == 0:
+                self.head = current.next
+            else:
+                cnt = 0
+                while cnt != target_index:
+                    cnt += 1
+                    last = current
+                    current = current.next
+                last.next = current.next
+
+        else:
+            raise IndexError("over index boundary")
 
     def __str__(self):
         temp = self.head
@@ -93,3 +138,20 @@ class Unorderlist(object):
 
     def __repr__(self):
         print(self.__str__())
+
+
+if __name__ == '__main__':
+    mylist = Unorderlist()
+    mylist.add(2)
+    mylist.add(4)
+    mylist.add(6)
+    print(mylist)
+    mylist.append(8)
+    print(mylist)
+    mylist.insert(10, 0)
+    print(mylist)
+    print('-----------------')
+    mylist.remove(4)
+    print(mylist)
+    mylist.pop()
+    print(mylist)
