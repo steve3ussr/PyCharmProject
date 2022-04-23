@@ -112,21 +112,24 @@ class Unorderlist(object):
         if target_index == ():
             target_index = self.length()-1
 
-        if 0 <= target_index <= self.length()-1:
+        if 0 <= target_index[0] <= self.length()-1:
             current = self.head
             last = None
-            if target_index == 0:
+            if target_index[0] == 0:
+                target_data = current.data
                 self.head = current.next
             else:
                 cnt = 0
-                while cnt != target_index:
+                while cnt != target_index[0]:
                     cnt += 1
                     last = current
                     current = current.next
+                target_data = current.data
                 last.next = current.next
-
         else:
             raise IndexError("over index boundary")
+
+        return target_data
 
     def __str__(self):
         temp = self.head
@@ -153,5 +156,6 @@ if __name__ == '__main__':
     print('-----------------')
     mylist.remove(4)
     print(mylist)
-    mylist.pop()
+    a = mylist.pop(2)
+    print(a)
     print(mylist)
