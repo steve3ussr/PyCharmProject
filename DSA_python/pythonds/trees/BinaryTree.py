@@ -4,12 +4,12 @@ ver: nodes and references
 
 
 class BinaryTree(object):
-    def __init__(self, val):
+    def __init__(self, val=None):
         self.key = val
         self.left = None
         self.right = None
 
-    def insertLeft(self, val):
+    def insertLeft(self, val=None):
         if self.left is None:
             self.left = BinaryTree(val)
         else:
@@ -17,7 +17,7 @@ class BinaryTree(object):
             temp_node.left = self.left
             self.left = temp_node
 
-    def insertRight(self, val):
+    def insertRight(self, val=None):
         if self.right is None:
             self.right = BinaryTree(val)
         else:
