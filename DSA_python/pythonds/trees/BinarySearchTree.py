@@ -96,9 +96,20 @@ class BinarySearchTree:
 
     def remove(self, currentNode):
         if currentNode.childrenNums() == 0:
-            pass
+            if currentNode.parent.leftChild == currentNode:
+                currentNode.parent.leftChild = None
+            else:
+                currentNode.parent.rightChild = None
+
         elif currentNode.childrenNums() == 0:
-            pass
+            currentNodeChild = currentNode.hasLeftChild() or currentNode.hasRightChild()
+            currentNodeChild.parent = currentNode.parent
+            if currentNode == currentNode.parent.leftChild:
+                currentNode.parent.leftChild = currentNodeChild
+            else:
+                currentNode.parent.rightChild = currentNodeChild
+
         else:
+            # TODO: 已经有头绪了，toDelNode 左子树的max，或者右子树的min
             pass
 
