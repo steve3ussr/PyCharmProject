@@ -329,6 +329,7 @@ if __name__ == '__main__':
 
 ```python
 import collections
+from typing import List
 
 
 class Solution:
@@ -352,9 +353,17 @@ class Solution:
         return ans
 ```
 
+# 697 findShortestSubArray
 
+第一次遍历：创建一个dict，k: 数值，v:[出现次数，起始index，结束index]
 
+第二次遍历，遍历dict，把次数变成负的，然后把[1]变成长度，[2]就pop掉
 
+现在出现次数最多的，[0]是最小的负数
+在这些出现次数做多的里面，[1] e.g. length 我们要的就是最小的
+然后python min有特殊的性质，所以min(dict.values())[1]就是次数
+
+正常应该是先找次数最多的，确定最大次数，再在次数最多的里面找长度最小的，但是用内置的min肯定更快
 
 
 

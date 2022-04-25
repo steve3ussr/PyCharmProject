@@ -26,6 +26,14 @@ class Deque(object):
     def index(self, i):
         return self.items[i]
 
+    def __getitem__(self, n):
+        if isinstance(n, int):  # n是索引
+            return self.items[n]
+        if isinstance(n, slice):  # n是切片
+            start = n.start
+            stop = n.stop
+            return self.items[n.start:n.stop]
+
 
 if __name__ == '__main__':
     deq = Deque()
@@ -36,8 +44,7 @@ if __name__ == '__main__':
     deq.addRear(4)
     print(deq)
 
-    print(deq.index(-1))
-    print(deq.isEmpty())
-    deq.removeFront()
+    print(deq[:2])
+
 
 
