@@ -23,6 +23,9 @@ class Deque(object):
     def __str__(self):
         return f'{self.items}'
 
+    def index(self, i):
+        return self.items[i]
+
 
 if __name__ == '__main__':
     deq = Deque()
@@ -32,8 +35,9 @@ if __name__ == '__main__':
     print(deq)
     deq.addRear(4)
     print(deq)
-    a = deq.removeRear()
-    print(deq)
-    b = deq.removeFront()
-    print(deq)
+
+    print(deq.index(-1))
+    print(deq.isEmpty())
+    deq.removeFront()
+
 

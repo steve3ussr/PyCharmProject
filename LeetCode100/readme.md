@@ -229,3 +229,144 @@ TIPS：
 
 我选择2
 
+# 239 maxSlidingWindow
+
+## 方法一：维护一个最大二叉堆
+
+> python自带了二叉堆，但是是最小堆
+
+1. 将前k个元素buildHeap；
+2. findMax；
+3. 移动窗口，将新元素insert：
+   1. 如果max不在窗口中：delMax；
+   2. 如果max在窗口中，继续
+
+移动窗口是$O(n)$，插入和删除都是$O(logn)$，所以总的来说是$O(nlogn)$。
+
+
+
+## 方法二：单调队列（双端队列deque的一种）
+
+假设现在的窗口为`[1, 2, 10, 3, 5, 7]`：
+
+1. 假设list中后面的都是0，那么只要10还在，最大值就是10，所以前面的1和2其实没有用，可以不要；
+2. 假设list中后面的都是0，并且移动到了`[3, 5, 7, 0, 0, 0]`，此时最大值是7，前面的3和5又没用了；
+3. 假设下一个是11，那么`[2, 10, 3, 5, 7, 11]`，有了新的最大值，那么前面的都没用了；
+4. 所以在最大值的左侧的都是没用的；
+5. 那在最大值的右侧呢？也不是全都有用，比如第2点中提到的，在**最大值后面的部分中的最大值**的前面元素也没用；
+6. 所以窗口中构成了一个单调递减的数列；
+7. 如果两个相邻的元素相等，*那么其实可以只留下最后一个重复的（还没想清楚）*，这就构成了一个**严格单调递减**的序列；
+
+假设我现在有了一个序列`[10, 8, 6]`：
+
+1. 假如下一个数字是11：那应该把前面的都去掉，变成`[11]`；
+
+2. 假如是9，那应该变成`[10, 9]`；
+
+3. 假如是4，应该变成`[10, 8,  6,  4]`；
+
+4. 思路：
+
+   1. 比较这个newEle，和队伍末尾，如果newEle更大，就pop；
+
+   2. 直到newEle比队伍末尾的要小，那就append；
+
+      > 要在末尾pop和append
+
+
+
+假设现在的窗口实际上是`[1, 2, 10, 3, 8, 6]`，但按照之前说的变成了`[10, 8, 6]`，那我怎么知道什么时候窗口离开10呢？
+
+ 1. 可以只储存index，val在比较的时候现查；
+
+ 2. 如果队首的index是`f`，实际窗口在`[i]`到`[i+k]`，只要`f >= i`就行，否则就得popleft
+
+    > 要在开端pop
+
+以上说的，非常适合用deque，两头都能进出。
+
+
+
+## 感想
+
+用自带的deque，比手动用list实现deque，或者自己写一个class Deque都要快得多。内置函数的优化真的强。
+
+自己写的：
+
+```python
+from typing import List
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int):
+        q = []
+        ans = []
+
+        def monoAppend(new):
+            while q and nums[new] >= nums[q[-1]]:
+                q.pop()
+            q.append(new)
+
+        for i in range(k):
+            monoAppend(i)
+        ans.append(nums[q[0]])
+
+        for i in range(k, len(nums)):
+            monoAppend(i)
+            while q[0] < i-k+1:
+                q.pop(0)
+            ans.append(nums[q[0]])
+
+        return ans
+
+if __name__ == '__main__':
+    test_list = [1, 3, 10, 4, 8, 6, 7, 8, 9, 0]
+    res = Solution().maxSlidingWindow(test_list, 3)
+    print(res)
+```
+
+用自带的py deque：
+
+```python
+import collections
+
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        n = len(nums)
+        q = collections.deque()
+        for i in range(k):
+            while q and nums[i] >= nums[q[-1]]:
+                q.pop()
+            q.append(i)
+
+        ans = [nums[q[0]]]
+        for i in range(k, n):
+            while q and nums[i] >= nums[q[-1]]:
+                q.pop()
+            q.append(i)
+            while q[0] <= i - k:
+                q.popleft()
+            ans.append(nums[q[0]])
+
+        return ans
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
