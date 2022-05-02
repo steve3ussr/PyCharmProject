@@ -1,7 +1,7 @@
-from TreeNode import TreeNode
+from .TreeNode import *
 
 
-class BinarySearchTree:
+class BinarySearchTree(object):
 
     def __init__(self):
         self.root = None
@@ -14,15 +14,16 @@ class BinarySearchTree:
         return self.size
 
     def __iter__(self):
-        return self.root.__iter__()
+        return self.root.__iter__()  # 相当于iter(self.root)
 
-    # *set* methods sets:
+    # *set* methods set:
 
     def put(self, key, value):
         if self.root:
             self._put(key, value, self.root)
         else:
             self.root = TreeNode(key, value)
+        self.size += 1
 
     def _put(self, key, value, currentRoot):
         if key < currentRoot.key:
@@ -41,7 +42,7 @@ class BinarySearchTree:
     def __setitem__(self, k, v):
         self.put(k, v)
 
-    # *get* methods sets:
+    # *get* methods set:
 
     def get(self, k):
         if self.root:
@@ -55,16 +56,11 @@ class BinarySearchTree:
 
     def _get(self, key, currentRoot):
         """和书里的不一样，希望能运行 """
-        if key < currentRoot.key:
-            if currentRoot.hasLeftChild():
-                self._get(key, currentRoot.leftChild)
-            else:
-                return None
-        elif key > currentRoot.key:
-            if currentRoot.hasRightChild():
-                self._get(key, currentRoot.rightChild)
-            else:
-                return None
+        if key < currentRoot.key and currentRoot.hasLeftChild():
+            return self._get(key, currentRoot.leftChild)
+
+        elif key > currentRoot.key and currentRoot.hasRightChild():
+            return self._get(key, currentRoot.rightChild)
         elif key == currentRoot.key:
             return currentRoot
         else:
@@ -79,11 +75,11 @@ class BinarySearchTree:
         else:
             return False
 
-    # *del* methods sets:
+    # *del* methods set:
 
     def delete(self, key):
         if nodeToRemove := self._get(key, self.root):
-            if nodeToRemove == self.root:
+            if nodeToRemove == self.root and self.size == 1:
                 self.root = None
             else:
                 self.remove(nodeToRemove)
@@ -95,21 +91,29 @@ class BinarySearchTree:
         self.delete(key)
 
     def remove(self, currentNode):
-        if currentNode.childrenNums() == 0:
+        if currentNode.childrenNums() == 0:  # 到这里说明一定是leaf
             if currentNode.parent.leftChild == currentNode:
                 currentNode.parent.leftChild = None
             else:
                 currentNode.parent.rightChild = None
 
-        elif currentNode.childrenNums() == 0:
+        elif currentNode.childrenNums() == 1:
             currentNodeChild = currentNode.hasLeftChild() or currentNode.hasRightChild()
-            currentNodeChild.parent = currentNode.parent
-            if currentNode == currentNode.parent.leftChild:
-                currentNode.parent.leftChild = currentNodeChild
-            else:
-                currentNode.parent.rightChild = currentNodeChild
+            if currentNode.parent:  # 不是根节点
+                currentNodeChild.parent = currentNode.parent
+                if currentNode == currentNode.parent.leftChild:
+                    currentNode.parent.leftChild = currentNodeChild
+                else:
+                    currentNode.parent.rightChild = currentNodeChild
+            else:  # 是根节点
+                self.root = currentNodeChild
 
         else:
-            # TODO: 已经有头绪了，toDelNode 左子树的max，或者右子树的min
-            pass
+            succ = currentNode.findSuccessor()
+            succ.spliceOut()  # succ extract
+            currentNode.key = succ.key  # replace k-v, don't change children and parent
+            currentNode.payload = succ.payload
 
+
+if __name__ == '__init__':
+    a = TreeNode(1, 'a')
