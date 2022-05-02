@@ -34,8 +34,8 @@ class Solution:
 
 
 if __name__ == '__main__':
-    test_number = "5453511111"
-    a_digit = "5"
+    test_number = "123"
+    a_digit = "3"
     ans = Solution().removeDigit(test_number, a_digit)
     print(ans)
 

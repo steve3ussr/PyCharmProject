@@ -38,8 +38,20 @@ class AVL_BST(BinarySearchTree):
             self.updateBalance(node.parent)
 
     def rebalance(self, node):
-        # TODO: unknown
-        pass
+        if node.balanceFactor < 0:  # 右倾，需要左旋
+            if node.rightChild.balanceFactor > 0:
+                self.rotateRight(node.rightChild)
+            else:
+                pass
+            self.rotateLeft(node)
+        elif node.balanceFactor > 0:
+            if node.leftChild.balanceFactor < 0:
+                self.rotateLeft(node.leftChild)
+            else:
+                pass
+            self.rotateRight(node)
+        else:
+            pass
 
     def rotateLeft(self, rotRoot: TreeNode):
         # 1. root.parent connection
