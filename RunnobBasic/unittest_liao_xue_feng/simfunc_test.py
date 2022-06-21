@@ -4,9 +4,7 @@ from simp_func import add_one
 
 class TestAfunc(unittest.TestCase):
 
-
-
-    def test_add_one(self):
+    def test_dwadwadwadwa(self):
         in_var = [1, 2, 5, 'a', 114.514]
         out_var = [2, 3, 666, 'a', 114.514]
         print(f'共 {len(in_var)} 个测试用例')
