@@ -225,6 +225,16 @@ TIPS：
 
 我选择2
 
+# 20 isValid
+
+简单题，Stack
+
+# 21 mergeTwoLists
+
+合并两个正序链表：（非递减）
+
+`1 -> 2 -> 2 -> 4`
+
 # 239 maxSlidingWindow
 
 ## 方法一：维护一个最大二叉堆
