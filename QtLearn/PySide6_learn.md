@@ -10,6 +10,16 @@
 
 https://zhuanlan.zhihu.com/p/445661017
 
+
+
+# TODO
+
+- [ ] 多个窗口
+
+- [ ] 创建widget并调用
+
+
+
 # 安装
 
 Qt是一个公司的.
@@ -22,13 +32,13 @@ PyQt 是第三方做的, 商用要收费.
 
 可以在Pycharm 里配置外部工具. 
 
-配置 UIC, RCC 和 QtDesigner
+配置 UIC, RCC 和 QtDesigner，程序在python/script
 
-UIC: 
-
-![](https://i.imgur.com/5AdNsYx.png)
-
-
+|            | 实参                                               | 工作目录               |
+| ---------- | ------------------------------------------------ |:------------------ |
+| UIC        | `$FileName$ -o $FileNameWithoutExtension$.py`    | `$FileDir$`        |
+| RCC        | `$FileName$ -o $FileNameWithoutExtension$_rc.py` | `$FileDir$`        |
+| QtDesigner |                                                  | `$ProjectFileDir$` |
 
 
 
@@ -68,8 +78,6 @@ app.exec()
 4. 创建标签后要调用 `show()` 函数才能显示; 
 
 5. `app.exec()`: 进入主循环，开始执行代码 (上一步的 show 到这里才有用) ; 
-
-
 
 # Signal & Slot
 
@@ -185,5 +193,29 @@ if __name__ == '__main__':
 1. 据说这个sys.exit()其实没什么作用，他其实就是用来反映程序终止的状态的，在它有父进程的情况下最好有这个sys.exit()通过她的返回值可以判断子进程的状态。而在没有子进程的程序中，其实sys.exit(app.exec_())和app.exec_()效果是一样的。
 
 
+
+# Qt Designer simp case
+
+创建一个 MainWindow，插入各种组件，在右上角可以修改各种对象名。
+
+左上角窗体，可以预览
+
+保存成`.ui`后，可以被python使用，使用方式（对于这个MainWindow类型的 ui ）：
+
+1. 用`PyUIC`转成py后导入，其中的类的attr中有我们之前定义的对象名，在主程序里写slot就行
+
+2. 通过文件的形式动态读取`.ui`文件：
+
+```python
+from PySide6.QtUiTools import QUiLoader
+
+
+ui_file = QFile("mainwindow.ui")
+ui_file.open(QFile.ReadOnly)
+
+loader = QUiLoader()
+window = loader.load(ui_file)
+window.show()
+```
 
 
