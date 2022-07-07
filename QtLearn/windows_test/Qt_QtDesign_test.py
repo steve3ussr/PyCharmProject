@@ -1,7 +1,6 @@
-from ui_str_connect import Ui_MainWindow
+from QtLearn.windows_test.ui_str_connect import Ui_MainWindow
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow
-from PySide6.QtCore import QFile
 from PySide6.QtCore import Slot
 
 

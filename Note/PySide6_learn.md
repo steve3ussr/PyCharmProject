@@ -273,3 +273,16 @@ if __name__ == '__main__':
 2. 主窗口点击 -> 从窗口初始化; 
 
 3. 从窗口点击 -> 主从窗口关闭. 
+
+# 打开文件
+
+```python
+
+ @Slot()
+ def open_explorer(self):
+     file_path = QFileDialog.getOpenFileName(QMainWindow(), "选择文件夹")[0]  # 选择目录，返回选中的路径
+     print(type(file_path))
+     self.ui.textEdit.setText(file_path)
+
+```
+

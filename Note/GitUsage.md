@@ -41,6 +41,9 @@
 
 [https://www.cnblogs.com/jzxy/articles/14808893.html](https://www.cnblogs.com/jzxy/articles/14808893.html)
 
+# 本地和远程仓库有冲突
+
+可将本地的存放起来：`git stash`
 
 
 
