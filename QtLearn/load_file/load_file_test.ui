@@ -241,36 +241,8 @@
      <property name="horizontalSpacing">
       <number>15</number>
      </property>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="checkbox_dcm">
-       <property name="text">
-        <string>.dcm</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="checkBox_merged">
-       <property name="text">
-        <string>specify merged file</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="checkBox_xlsx">
-       <property name="text">
-        <string>specify .xlsx</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit_merged">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QToolButton" name="toolButton_dcm">
+     <item row="3" column="3">
+      <widget class="QToolButton" name="toolButton_merged">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -279,15 +251,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_dcm">
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="checkBox_merged">
        <property name="enabled">
         <bool>false</bool>
        </property>
+       <property name="text">
+        <string>specify merged file</string>
+       </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_xlsx">
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEdit_merged">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -309,8 +284,8 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="toolButton_xlsx">
+     <item row="1" column="3">
+      <widget class="QToolButton" name="toolButton_dcm">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -319,8 +294,39 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
-      <widget class="QToolButton" name="toolButton_merged">
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEdit_dcm">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="checkbox_dcm">
+       <property name="text">
+        <string>.dcm</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="checkBox_xlsx">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>specify .xlsx</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="lineEdit_xlsx">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QToolButton" name="toolButton_xlsx">
        <property name="enabled">
         <bool>false</bool>
        </property>
