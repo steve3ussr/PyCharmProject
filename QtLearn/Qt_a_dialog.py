@@ -28,4 +28,5 @@ if __name__ == '__main__':
     a_dialog.show()
     sys.exit(app.exec())
     # app.exec()
-    
+
+
