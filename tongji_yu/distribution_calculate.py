@@ -44,10 +44,16 @@ class DistributionCalculate(object):
                 continue
         return True
 
-    def calc_sector_radial_list(self): pass
+    def calc_sector_radial_list(self, counts_ring): pass
     """
-    计算一个扇区内各环形的径向尺寸列表
+    指定环的数量, 按照等面积计算各环形的径向尺寸列表
+    还需要: 
+    self.r_available
+    self.r_central
+    self.r_total 
+    3个中有2个就行
     """
+    pass
 
     def judge_ring_hole_counts(self): pass
     """

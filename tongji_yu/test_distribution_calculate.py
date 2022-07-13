@@ -10,7 +10,7 @@ def judge_prime_check(x: int) -> int:
 
     cnt = 0
     for i in range(1, x + 1):
-        cnt += 1 if DistributionCalculate(1, i).judge_prime() else 0
+        cnt += 1 if DistributionCalculate(1, 1, 1, i).judge_prime() else 0
 
     return cnt
 
@@ -20,6 +20,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(judge_prime_check(k := 100), 25, f'{k}以内素数数量判断错误')
         self.assertEqual(judge_prime_check(k := 1000), 168, f'{k}以内素数数量判断错误')
         self.assertEqual(judge_prime_check(k := 10000), 1229, f'{k}以内素数数量判断错误')
+        self.assertEqual(judge_prime_check(k := 1000000), 78498, f'{k}以内素数数量判断错误')
 
 
 if __name__ == '__main__':
