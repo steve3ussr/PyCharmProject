@@ -318,6 +318,7 @@ Slot中根据`isChecked()`决定传入什么filter
 self.timer = QTimer()
 self.timer.start(250)
 # 250 ms 后 timer 发出 timeout 信号, 并且重新计时
+sel.timer.timeout.connect(Slot)
 ```
 
 # 
