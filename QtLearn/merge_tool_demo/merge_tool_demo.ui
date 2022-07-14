@@ -190,7 +190,7 @@
           <string>.hex</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -198,6 +198,9 @@
         <widget class="QRadioButton" name="radioButton_s19">
          <property name="text">
           <string>.s19</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

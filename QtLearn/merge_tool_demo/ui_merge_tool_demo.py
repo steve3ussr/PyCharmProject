@@ -153,12 +153,13 @@ class Ui_MainWindow(object):
         self.radioButton_hex.setObjectName(u"radioButton_hex")
         self.radioButton_hex.setLayoutDirection(Qt.LeftToRight)
         self.radioButton_hex.setAutoFillBackground(True)
-        self.radioButton_hex.setChecked(True)
+        self.radioButton_hex.setChecked(False)
 
         self.horizontalLayout.addWidget(self.radioButton_hex)
 
         self.radioButton_s19 = QRadioButton(self.gridLayoutWidget)
         self.radioButton_s19.setObjectName(u"radioButton_s19")
+        self.radioButton_s19.setChecked(True)
 
         self.horizontalLayout.addWidget(self.radioButton_s19)
 

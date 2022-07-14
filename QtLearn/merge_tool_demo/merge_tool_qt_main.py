@@ -10,12 +10,12 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.__out_format = 'hex'
+        self.__out_format = None
         self.__set_optional_internal_link()
         self.__set_toolButtons()
-        self.__set_timer()
+        self.__set_timer()  # important
 
-        self.test_auto_fill()
+        # self.test_auto_fill()
         self.ui.pushButton.clicked.connect(self.__main_exec)
 
     def __set_optional_internal_link(self) -> None:
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         self.ui.checkBox_xlsx.clicked['bool'].connect(self.ui.lineEdit_xlsx.setEnabled)
         self.ui.checkBox_xlsx.clicked['bool'].connect(self.ui.toolButton_xlsx.setEnabled)
 
-    def __set_toolButtons(self):
+    def __set_toolButtons(self) -> None:
         """
         set Slots for all toolButtons
         """
@@ -47,16 +47,7 @@ class MainWindow(QMainWindow):
         self.__get_file(self.ui.toolButton_dcm, self.ui.lineEdit_dcm, 'DCM File (*.dcm)')
         self.__save_file(self.ui.toolButton_xlsx, self.ui.lineEdit_xlsx, 'Excel File (*.xlsx)')
 
-        temp_str = 'Intel (*.hex)' if self.__out_format == 'hex' else 'Motorola32 (*.s19)'
-        self.__save_file(self.ui.toolButton_merged, self.ui.lineEdit_merged, temp_str)
-
-    def __set_timer(self):
-        """
-        set a timer to check and update statuses
-        """
-        self.timer = QTimer()
-        self.timer.start(50)
-        self.timer.timeout.connect(self.__JIT_status_update)
+        self.__save_file(self.ui.toolButton_merged, self.ui.lineEdit_merged, self.__out_format)
 
     def __get_file(self, a_button, a_line, a_str) -> None:
         """
@@ -75,6 +66,7 @@ class MainWindow(QMainWindow):
         """
         Slot without decorator will execute(open Dialog) when initializing
         """
+
         def __select_file_inner() -> None:
             file_path = QFileDialog.getOpenFileName(QMainWindow(),
                                                     caption="选择文件",
@@ -89,7 +81,8 @@ class MainWindow(QMainWindow):
         """
         Slot without decorator will execute(open Dialog) when initializing
         """
-        def select_folder_inner():
+
+        def select_folder_inner() -> None:
             folder_path = QFileDialog.getSaveFileName(QMainWindow(),
                                                       caption="保存文件",
                                                       dir=".",
@@ -98,19 +91,75 @@ class MainWindow(QMainWindow):
 
         return select_folder_inner
 
+    def __set_timer(self):
+        """
+        set a timer to check and update statuses
+        """
+        self.timer = QTimer()
+        self.timer.start(100)
+        self.timer.timeout.connect(self.__JIT_status_update)
+
+    def __JIT_status_update(self):
+        """
+        Just-In-Time check and update widgets' statuses
+        """
+        self.__update_out_format()
+        if self.__check_required_validity():
+            self.__optional_status_update_valid()
+        else:
+            self.__optional_status_update_invalid()
+
+    @staticmethod
+    def __check_path_format(path, *format_tuple) -> bool:
+        # TODO: exists
+        """
+        exp: __check_path_format('123.exe', 'exe', 'zip', 'rar')
+        check path has:
+            1. valid name
+            2. expected suffix
+        """
+        if (i := path.rfind('.')) == -1:
+            return False
+        else:
+            return True if path[i + 1:] in format_tuple and path[:i] else False
+
     def __update_out_format(self) -> None:
         """
-        update self.out_format(.hex / .s19) according to REQUIRED radioButton
+        update:
+            1. self.out_format(.hex / .s19) according to REQUIRED radioButton
+            2. merged file toolButton -> Dialog file filter
+            3. merged file path
         """
-        if self.ui.radioButton_hex.isChecked():
-            self.__out_format = 'hex'
-        else:
-            self.__out_format = 's19'
+        current_format = 'hex' if self.ui.radioButton_hex.isChecked() else 's19'
+        if current_format != self.__out_format:
 
-    def __check_required(self) -> bool:
+            # 1. reconnect toolButton
+            self.ui.toolButton_merged.clicked.disconnect()
+            temp_str = 'Intel (*.hex)' if current_format == 'hex' else 'Motorola32 (*.s19)'
+            self.__save_file(self.ui.toolButton_merged, self.ui.lineEdit_merged, temp_str)
+
+            # 2. replace suffix of path
+            if self.__check_path_format(current_path := self.ui.lineEdit_merged.text(), current_format):
+                pass
+            elif self.__check_path_format(current_path, self.__out_format):
+                self.ui.lineEdit_merged.setText(current_path[:-3] + current_format)
+            else:
+                self.ui.lineEdit_merged.clear()
+
+            # 3. switch internal status
+            self.__out_format = current_format
+
+        else:
+            pass
+
+    # TODO: check input validity. include dcm
+
+    def __check_required_validity(self) -> bool:
+        # TODO: exist or not?
         """
         check required(src and tgt; a2l, hex/s19):
             has valid path or not
+        Accordingly switch status of OUTPUT
         """
         src_a2l_path = self.ui.lineEdit_src_a2l.text()
         src_hex_s19_path = self.ui.lineEdit_src_hex_s19.text()
@@ -125,28 +174,10 @@ class MainWindow(QMainWindow):
         else:
             return False
 
-    @staticmethod
-    def __check_path_format(path, *format_tuple) -> bool:
+    def __optional_status_update_valid(self):
         """
-        exp: __check_path_format('123.exe', 'exe', 'zip', 'rar')
-        check path has:
-            1. valid name
-            2. expected suffix
+        options if required inputs valid
         """
-        if (i := path.rfind('.')) == -1:
-            return False
-        else:
-            return True if path[i + 1:] in format_tuple and path[:i] else False
-
-    @Slot()
-    def __JIT_status_update(self):
-        """
-        Just-In-Time check and update widgets' status 
-        """
-        self.__update_out_format()
-        self.__required_valid() if self.__check_required() else self.__required_invalid()
-
-    def __required_valid(self):
         self.ui.checkBox_merged.setEnabled(True)
         self.ui.checkBox_xlsx.setEnabled(True)
         self.ui.pushButton.setEnabled(True)
@@ -165,15 +196,15 @@ class MainWindow(QMainWindow):
             xlsx_path = tgt_hex_s19[:tgt_hex_s19.rfind('.')] + '_MERGE_REPORT.xlsx'
             self.ui.lineEdit_xlsx.setText(xlsx_path)
 
-    def __required_invalid(self):
+    def __optional_status_update_invalid(self):
         """
         options if required inputs invalid
         """
         self.ui.checkBox_merged.setEnabled(False)
         self.ui.checkBox_xlsx.setEnabled(False)
         self.ui.pushButton.setEnabled(False)
-        self.ui.lineEdit_merged.clear()
-        self.ui.lineEdit_xlsx.clear()
+        # self.ui.lineEdit_merged.clear()
+        # self.ui.lineEdit_xlsx.clear()
 
     def test_auto_fill(self):
         self.ui.lineEdit_src_a2l.setText('src.a2l')
