@@ -10,7 +10,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setter_file(self.ui.toolButton_src_a2l, self.ui.lineEdit_src_a2l, '*.a2l')
-        self.setter_file(self.ui.toolButton_src_hex_s19, self.ui.lineEdit_src_hex_s19, '*.hex; *.s19')
+        self.setter_file(self.ui.toolButton_src_hex_s19, self.ui.lineEdit_src_hex_s19, ('*.hex', '*.s19'))
         self.setter_file(self.ui.toolButton_tgt_a2l, self.ui.lineEdit_tgt_a2l, '*.a2l')
         self.setter_file(self.ui.toolButton_tgt_hex_s19, self.ui.lineEdit_tgt_hex_s19, '*.hex; *.s19')
 

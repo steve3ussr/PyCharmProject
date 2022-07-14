@@ -274,15 +274,58 @@ if __name__ == '__main__':
 
 3. 从窗口点击 -> 主从窗口关闭. 
 
-# 打开文件
+# Select Single File
 
 ```python
-
  @Slot()
  def open_explorer(self):
      file_path = QFileDialog.getOpenFileName(QMainWindow(), "选择文件夹")[0]  # 选择目录，返回选中的路径
      print(type(file_path))
      self.ui.textEdit.setText(file_path)
-
 ```
 
+`GetFileName`可以加多个参数: 
+
+1. `caption='description'`, 显示在 QFileDialog 左上角
+
+2. `dir='.'`, 选定初始路径, 为本程序所在路径
+
+3. `filter="Python Files .py(*.py);;Markdown doc (*.md; *.markdown)"`
+
+两个分号可以让不同的文件分开; 
+
+括号里的是通配符, 外面的是描述; 
+
+![](https://i.imgur.com/VlkVudu.png)
+
+# Select File Type according to Other Widget
+
+Slot中根据`isChecked()`决定传入什么filter
+
+反正选择文件只是返回一个 path str
+
+# Real Time Status Update
+
+通过一个计数器实现自动状态更新. 
+
+需求: 我希望文本框里有东西的时候, 才能 enable 一个 radio button, 并且 checkable;
+
+如果文本框是空的, 就disable, 并且 set chekced False.
+
+方法: 定义一个计数器: 
+
+```python
+self.timer = QTimer()
+self.timer.start(250)
+# 250 ms 后 timer 发出 timeout 信号, 并且重新计时
+```
+
+# 
+
+# Widgets Linked: bool
+
+如果希望一个 radio button 的状态决定其他其他 widget enable, 可以: 
+
+```
+button.clicked['bool'].connect(something.setEnabled)
+```
