@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         set a timer to check and update statuses
         """
         self.__timer = QTimer()
-        self.__timer.start(100)
+        self.__timer.start(50)
         self.__timer.timeout.connect(self.__JIT_status_update)
 
     def __JIT_status_update(self):
@@ -111,13 +111,16 @@ class MainWindow(QMainWindow):
 
         if self.__check_input_validity():
             self.__output_status_update_valid()
+
+            if self.__check_output_validity():
+                self.ui.pushButton.setEnabled(True)
+            else:
+                self.ui.pushButton.setEnabled(False)
+
         else:
             self.__output_status_update_invalid()
 
-        if self.__check_output_validity():
-            self.ui.pushButton.setEnabled(True)
-        else:
-            self.ui.pushButton.setEnabled(False)
+
 
     @staticmethod
     def __check_path(path, *format_tuple, existJudge=True) -> bool:
@@ -133,7 +136,11 @@ class MainWindow(QMainWindow):
             return False
         else:
             temp = os.path.exists(path) if existJudge else True
-            return True if path[i + 1:] in format_tuple and path[:i] and temp else False
+
+            # debug
+            # if
+
+            return True if (path[i + 1:] in format_tuple) and path[:i] and temp else False
 
     def __update_out_format(self) -> None:
         """
@@ -187,7 +194,7 @@ class MainWindow(QMainWindow):
         if self.ui.checkbox_dcm.isChecked():
             if self.__check_path(self.ui.lineEdit_dcm.text(), 'dcm', existJudge=True):
                 return True
-            elif self.ui.lineEdit_dcm.text() is None:
+            elif self.ui.lineEdit_dcm.text().strip() == '':
                 return True
             else:
                 return False
@@ -216,6 +223,18 @@ class MainWindow(QMainWindow):
             xlsx_path = tgt_hex_s19[:tgt_hex_s19.rfind('.')] + '_MERGE_REPORT.xlsx'
             self.ui.lineEdit_xlsx.setText(xlsx_path)
 
+        if self.ui.checkBox_merged.isChecked():
+            self.ui.lineEdit_merged.setEnabled(True)
+            self.ui.toolButton_merged.setEnabled(True)
+        else:
+            pass
+
+        if self.ui.checkBox_xlsx.isChecked():
+            self.ui.lineEdit_xlsx.setEnabled(True)
+            self.ui.toolButton_xlsx.setEnabled(True)
+        else:
+            pass
+
     def __output_status_update_invalid(self):
         """
         update output status if inputs valid
@@ -225,6 +244,10 @@ class MainWindow(QMainWindow):
         self.ui.pushButton.setEnabled(False)
         # self.ui.lineEdit_merged.clear()
         # self.ui.lineEdit_xlsx.clear()
+        self.ui.lineEdit_merged.setEnabled(False)
+        self.ui.toolButton_merged.setEnabled(False)
+        self.ui.lineEdit_xlsx.setEnabled(False)
+        self.ui.toolButton_xlsx.setEnabled(False)
 
     def __check_output_validity(self):
         """
@@ -249,10 +272,10 @@ class MainWindow(QMainWindow):
         return True
 
     def test_auto_fill(self):
-        self.ui.lineEdit_src_a2l.setText('src.a2l')
-        self.ui.lineEdit_src_hex_s19.setText('src.hex')
-        self.ui.lineEdit_tgt_a2l.setText('tgt.a2l')
-        self.ui.lineEdit_tgt_hex_s19.setText('tgt.s19')
+        self.ui.lineEdit_src_a2l.setText('D:/src.a2l')
+        self.ui.lineEdit_src_hex_s19.setText('D:/src.hex')
+        self.ui.lineEdit_tgt_a2l.setText('D:/tgt.a2l')
+        self.ui.lineEdit_tgt_hex_s19.setText('D:/tgt.s19')
 
     def _main_exec(self):
         # TODO: execute
