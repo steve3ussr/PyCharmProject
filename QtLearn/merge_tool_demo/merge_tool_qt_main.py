@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         self.__out_format = None
         self.__set_optional_internal_link()
         self.__set_toolButtons()
-        self.__set_timer()  # very important!
+        self.__set_timer(80)  # very important!
 
         self.test_auto_fill()
         self.ui.pushButton.clicked.connect(self._main_exec)
@@ -94,12 +94,12 @@ class MainWindow(QMainWindow):
 
         return select_folder_inner
 
-    def __set_timer(self):
+    def __set_timer(self, k=100):
         """
         set a timer to check and update statuses
         """
         self.__timer = QTimer()
-        self.__timer.start(50)
+        self.__timer.start(k)
         self.__timer.timeout.connect(self.__JIT_status_update)
 
     def __JIT_status_update(self):
