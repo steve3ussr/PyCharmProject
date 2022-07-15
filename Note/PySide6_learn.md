@@ -312,13 +312,13 @@ Slot中根据`isChecked()`决定传入什么filter
 
 如果文本框是空的, 就disable, 并且 set chekced False.
 
-方法: 定义一个计数器: 
+方法: 定义一个计数器:
 
 ```python
-self.timer = QTimer()
-self.timer.start(250)
+self.__timer = QTimer()
+self.__timer.start(250)
 # 250 ms 后 timer 发出 timeout 信号, 并且重新计时
-sel.timer.timeout.connect(Slot)
+sel.__timer.timeout.connect(Slot)
 ```
 
 # 
