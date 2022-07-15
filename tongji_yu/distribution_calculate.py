@@ -93,7 +93,15 @@ class DistributionCalculate(object):
 
             if self.__calc_sector_radial_list(i):
                 if self.__judge_ring_hole_counts(a_ring_hole_counts):
-                    res.append(f'共分配 {self.counts_hole_rest} 个孔, 分成{i} 环, 每环 {a_ring_hole_counts} 个')
+
+                    temp_list = [self.r_central] * i
+                    for index, value in self.radial_distribution:
+                        temp_list[index] = self.r_central + i/2
+
+
+
+
+                    res.append(f'共分配 {self.counts_hole_rest} 个孔, 分成{i} 环, 每环 {a_ring_hole_counts} 个, 中心半径: {self.r_central}, 各环径向尺寸: {}')
                 else:
                     continue
             else:
@@ -109,4 +117,4 @@ class DistributionCalculate(object):
 
 
 if __name__ == "__main__":
-    DistributionCalculate(diameter_total=99, thick_outer=1.5, diameter_hole=1, thick_inner=0, counts_hole=120).exec()
+    DistributionCalculate(diameter_total=99, thick_outer=1.5, diameter_hole=1.5, thick_inner=1.5, counts_hole=70).exec()
