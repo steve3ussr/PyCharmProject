@@ -63,7 +63,7 @@ class TreeNode(object):
         return current
 
     def findSuccessor(self):
-        # TODO： 如果没有parent怎么办？看不懂啊
+        # TODO: 如果没有parent怎么办？看不懂啊
         succ = None
         if self.hasRightChild():  # 如果是删除有两个子节点的父节点，只会用到这一部分
             succ = self.rightChild.findMin()

@@ -1,4 +1,4 @@
-from .TreeNode import *
+from .TreeNode import TreeNode
 
 
 class BinarySearchTree(object):
@@ -16,7 +16,7 @@ class BinarySearchTree(object):
     def __iter__(self):
         return self.root.__iter__()  # 相当于iter(self.root)
 
-    # *set* methods set:
+    # *set* methods group:
 
     def put(self, key, value):
         if self.root:
@@ -42,7 +42,7 @@ class BinarySearchTree(object):
     def __setitem__(self, k, v):
         self.put(k, v)
 
-    # *get* methods set:
+    # *get* methods group:
 
     def get(self, k):
         if self.root:
@@ -56,6 +56,11 @@ class BinarySearchTree(object):
 
     def _get(self, key, currentRoot):
         """和书里的不一样，希望能运行 """
+        if currentRoot:
+            print('trigger _get')  # I don't expect this seg to be triggered
+        else:
+            return None
+
         if key < currentRoot.key and currentRoot.hasLeftChild():
             return self._get(key, currentRoot.leftChild)
 
