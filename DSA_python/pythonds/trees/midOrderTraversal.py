@@ -1,6 +1,6 @@
 def midOrderTraversal(root):
     if root is not None:
-        midOrderTraversal(root.left)
+        midOrderTraversal(root.leftChild)
         print(root.key)
-        midOrderTraversal(root.right)
+        midOrderTraversal(root.rightChild)
 
