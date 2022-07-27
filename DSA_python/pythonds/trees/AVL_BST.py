@@ -96,4 +96,35 @@ class AVL_BST(BinarySearchTree):
         rotRoot.balanceFactor += -1 - max(0, newRoot.balanceFactor)
         newRoot.balanceFactor += -1 + min(0, rotRoot.balanceFactor)
 
+    def remove(self, currentNode):
+        """
+        currentNode is not ROOT
+        """
+        if currentNode.childrenNums() == 0:  # 到这里说明一定是leaf
+            # disconnect
+            if currentNode.parent.leftChild == currentNode:
+                currentNode.parent.leftChild = None
+            else:
+                currentNode.parent.rightChild = None
+            # update balance factor
+            self.updateBalance(currentNode.parent)
 
+        elif currentNode.childrenNums() == 1:  # 不是leaf，但是只有一个child，可以简化
+
+            currentNodeChild = currentNode.hasLeftChild() or currentNode.hasRightChild()
+
+            # connect node.child & node.parent
+            currentNodeChild.parent = currentNode.parent
+            if currentNode == currentNode.parent.leftChild:
+                currentNode.parent.leftChild = currentNodeChild
+            else:
+                currentNode.parent.rightChild = currentNodeChild
+
+            self.updateBalance(currentNode.parent)
+
+        else:  # 2 children
+            succ = currentNode.findSuccessor()
+            succ.spliceOut()  # succ extract
+            self.updateBalance(succ.parent)
+            currentNode.key = succ.key  # replace k-v, don't change children and parent
+            currentNode.payload = succ.payload

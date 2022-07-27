@@ -1,6 +1,6 @@
 class MaxBinaryHeap(object):
-    def __init__(self):
-        self.heap = [0]
+    def __init__(self, min_ele=0):
+        self.heap = [min_ele]
         self.length = 0
 
     def findChild(self):

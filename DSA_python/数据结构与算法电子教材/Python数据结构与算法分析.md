@@ -64,6 +64,115 @@
 
 # 4 Recursion
 
+## 4.2 Introduction
+
+**The Three Principles of Recursion**
+
+以递归求数列的和为例：
+
+1. 递归算法必须有基本情况（数列长度为1时返回）；
+2. 递归算法必须改变其状态并向基本情况靠近（数列拆分为**首项**和**其余项**）；
+3. 递归算法必须递归地调用自己（返回首项和**其余项的和**）。
+
+## 4.3 Realization
+
+递归通过**栈帧**来实现。
+
+![](https://i.imgur.com/0gh20r1.png)
+
+栈底部的将保留函数和使用的变量（局部变量作用域为该帧）；
+
+栈顶计算的结果将一层层向下替换，直至栈空；
+
+## 4.7 DP, GA
+
+> DP: Dynamic Programming
+>
+> GA: Greedy Algorithm
+
+例子：
+
+有1、5、10、25美分的硬币，而我需要63美分，怎么才能让硬币数量最少呢？
+
+GA：试图最大程度地解决问题，但这只是局部最优解。如果GA的话，需要2个25美分，1个10美分，3个1美分，暂时是全局最优；
+
+但如果还有21美分的硬币，最优解是3个21美分硬币——这时候GA就不起作用了。
+
+---
+
+利用递归的思想：
+
+> 1. 递归算法必须有基本情况（数列长度为1时返回）；
+> 2. 递归算法必须改变其状态并向基本情况靠近（数列拆分为**首项**和**其余项**）；
+> 3. 递归算法必须递归地调用自己（返回首项和**其余项的和**）。
+
+1. 基本情况：当剩下的金额和某个硬币金额一样；
+2. 多种靠近方式：
+   1. 1美分+剩下的；
+   2. 5美分+剩下的；
+   3. 10美分+剩下的；
+3. 递归：拆分成一个硬币剩下的金额；
+
+> 但这有很大的问题：
+>
+> ![](https://i.imgur.com/yYDBYXJ.png)
+>
+> 重复调用的次数太多，比如16就出现了很多次
+
+初始解法：
+
+``` python
+def calc_coins_recursion(self, val_list: list, charge: int):
+    if charge in val_list:
+        return 1
+    else:
+        return 1 + min(self.calc_coins_recursion(val_list, charge - x) for x in val_list if x < charge)
+```
+
+cache 解法，速度快了很多：
+
+``` python
+self.cache = dict()
+
+def calc_coins_recursion_cache(self, val_list: list, charge: int):
+    if _ := self.cache.get(charge):
+        return _
+    else:
+        pass
+
+    if charge in val_list:
+        tmp = 1
+    else:
+        tmp = 1 + min(self.calc_coins_recursion_cache(val_list, charge - x) for x in val_list if x < charge)
+
+    self.cache[charge] = tmp
+    return tmp
+```
+
+dp解法：
+
+``` python
+    def dp_coins(self, val_list, change):
+        # build
+        for i in range(1, change+1):
+            if i in val_list:
+                self.dp[i] = 1
+            else:
+                self.dp[i] = min((self.dp[i-x] + 1 for x in val_list if x < i))
+
+        return self.dp[change]
+```
+
+**DP是自下而上的，从初始值开始构建整个表格；虽然占用了一些空间用于储存，但是速度很快**
+
+**递归是自上而下的，有可能会栈溢出**
+
+# Search & Sort
+
+
+
+
+
 # 6 树
 
 ## 6.3 术语和定义
@@ -141,6 +250,17 @@
 - 前序遍历：先访问根节点，然后递归地前序遍历左子树，最后递归地前序遍历右子树。（`*+73-52`）
 - 后序遍历：先递归地后序遍历右子树，然后递归地后序遍历左子树，最后访问根节点。（`25-37+*`）
 - 中序遍历：先递归地中序遍历左子树，然后访问根节点，最后递归地中序遍历右子树。（`7+3*5-2`），可以还原原来的表达式
+
+**也可以改成非递归，以中序为例：**
+
+1. 找到最小节点，并把路径上的节点都 push ；
+2. pop，print
+   1. 如果存在右子树，把从右子节点，到右子树的最小节点的全都push；
+   2. 如果不存在右子树，pass
+   3. 循环
+3. 
+
+
 
 ## 6.6 二叉堆实现优先队列
 
@@ -403,3 +523,10 @@ put：overload，需要在插入的同时更新所有父节点的平衡因子。
 > - **如果右倾，就让右边的更加右倾；如果左倾，就让左边的更加左倾；**
 
 ![](https://i.imgur.com/9Vq9oE3.png)
+
+#### delete
+
+1. 如果是 leaf ，那就没事：更新向上的父节点 balance factor，必要的时候 rebalance；
+2. 如果不是leaf：找 succ 替代，并重建 succ 附近的连接（`TreeNode.spliceOut`）；
+3. 从 succ 的父节点开始向上更新；
+

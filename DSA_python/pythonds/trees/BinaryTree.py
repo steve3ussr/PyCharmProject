@@ -6,30 +6,30 @@ ver: nodes and references
 class BinaryTree(object):
     def __init__(self, val=None):
         self.key = val
-        self.left = None
-        self.right = None
+        self.leftChild = None
+        self.rightChild = None
 
     def insertLeft(self, val=None):
-        if self.left is None:
-            self.left = BinaryTree(val)
+        if self.leftChild is None:
+            self.leftChild = BinaryTree(val)
         else:
             temp_node = BinaryTree(val)
-            temp_node.left = self.left
-            self.left = temp_node
+            temp_node.leftChild = self.leftChild
+            self.leftChild = temp_node
 
     def insertRight(self, val=None):
-        if self.right is None:
-            self.right = BinaryTree(val)
+        if self.rightChild is None:
+            self.rightChild = BinaryTree(val)
         else:
             temp_node = BinaryTree(val)
-            temp_node.right = self.right
-            self.right = temp_node
+            temp_node.rightChild = self.rightChild
+            self.rightChild = temp_node
 
     def getLeftBranch(self):
-        return self.left
+        return self.leftChild
 
     def getRightBranch(self):
-        return self.right
+        return self.rightChild
 
     def setRootVal(self, new_val):
         self.key = new_val

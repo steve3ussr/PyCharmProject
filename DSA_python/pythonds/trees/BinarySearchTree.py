@@ -119,6 +119,23 @@ class BinarySearchTree(object):
             currentNode.key = succ.key  # replace k-v, don't change children and parent
             currentNode.payload = succ.payload
 
+    def __str__(self):
+        alist = []
+
+        def mid_trv(node):
+            nonlocal alist
+            if node is not None:
+                mid_trv(node.leftChild)
+                alist.append(node.key)
+                mid_trv(node.rightChild)
+
+        if self.root:
+            mid_trv(self.root)
+        else:
+            pass
+
+        return f'{alist}'
+
 
 if __name__ == '__init__':
     a = TreeNode(1, 'a')
