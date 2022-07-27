@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
     def __JIT_status_update(self):
         """
         Just-In-Time check and update widgets' statuses
-        VERY IMPORTANT
+        VERY IMPORTANT!
         """
         self.__update_out_format()
 
@@ -119,8 +119,6 @@ class MainWindow(QMainWindow):
 
         else:
             self.__output_status_update_invalid()
-
-
 
     @staticmethod
     def __check_path(path, *format_tuple, existJudge=True) -> bool:
