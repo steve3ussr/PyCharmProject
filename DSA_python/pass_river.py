@@ -5,7 +5,7 @@ class Solution(object):
     def __init__(self, sheep, lion):
         self.sheep = sheep
         self.lion = lion
-        self.dp = [[None for j in range(lion+1)] for i in range(sheep+1)]
+        self.dp = list([list([None for j in range(lion+1)]) for i in range(sheep+1)])
         self.dp[sheep][lion] = 0
         self.move = [(1, 1), (1, 0), (0, 1), (2, 0), (0, 2)]
 
