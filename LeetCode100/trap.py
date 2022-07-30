@@ -48,53 +48,38 @@ class Solution:
         return peek_list
 
     def test_max(self, height):
-        height.insert(0, 0)
         max_val = max(height)
         sum_stone = sum(height)
 
-        first_max_index = None
-
-        sum_water_left = 0
+        first_max_index = 0
+        final_res = 0
         tmp_max = 0
         for i, v in enumerate(height):
-            if not first_max_index:
-                if v == max_val:
-                    first_max_index = i
-                if v >= tmp_max:
-                    tmp_max = v
-                sum_water_left += tmp_max
-            else:
+            if v == max_val:
+                first_max_index = i
                 break
-        sum_water_left -= max_val
-        print(f'sum_water_left = {sum_water_left}')
+            else:
+                tmp_max = max(tmp_max, v)
+                final_res += tmp_max
 
-        if first_max_index == len(height) - 1:
-            return sum_water_left - sum_stone + max_val
-        else:
 
-            second_max_index = None
-            sum_water_right = 0
-            tmp_max = 0
-            for i in range(len(height) - 1, first_max_index - 1, -1):
-                v = height[i]
 
-                if not second_max_index:
-                    if v == max_val:
-                        second_max_index = i
-                    if v >= tmp_max:
-                        tmp_max = v
+        second_max_index = len(height) - 1
 
-                    sum_water_right += tmp_max
+        if first_max_index == second_max_index:
+            return final_res - sum_stone + max_val
 
-            sum_water_right -= max_val
-            print(f'sum_water_right = {sum_water_right}')
+        tmp_max = 0
+        for i in range(len(height) - 1, -1, -1):
+            v = height[i]
+            if v == max_val:
+                second_max_index = i
+                break
+            else:
+                tmp_max = max(tmp_max, v)
+                final_res += tmp_max
 
-            tmp_res = sum_water_left + sum_water_right
-            delta = second_max_index - first_max_index + 1
-            tmp_res += delta * max_val
-            print(f'mid = {delta * max_val}')
-
-            return tmp_res - sum_stone
+        return final_res - sum_stone + max_val * (second_max_index - first_max_index +1)
 
     def test_max_opt(self, height):
         height.insert(0, 0)
@@ -138,6 +123,7 @@ class Solution:
 if __name__ == '__main__':
     h2 = [4, 2, 0, 3, 2, 5]
     h = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
-    h3 = [2, 0, 2]
-    res = Solution().test_max(h3)
+    h3 = [2, 3, 3, 2]
+    hk = [2, 1, 0, 2]
+    res = Solution().test_max_opt(hk)
     print(f'res = {res}')
