@@ -1,5 +1,6 @@
 class Stack(object):
     def __init__(self):
+        self.peak = None
         self.content = []
 
     def isEmpty(self):

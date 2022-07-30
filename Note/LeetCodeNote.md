@@ -235,6 +235,61 @@ TIPS：
 
 `1 -> 2 -> 2 -> 4`
 
+# 42 trap
+
+![](https://i.imgur.com/47ZNu0V.png)
+
+
+
+
+
+
+
+
+
+# 62 uniquePaths
+
+`math.comb()`一行就能实现
+
+这是个求$C_n^m$的问题。
+
+# 64 minPathSum
+
+没什么可说的，就很简单
+
+![](https://i.imgur.com/76DwJ6I.png)
+
+# 70 climbStairs
+
+一般用一维数组，但是也可以降维成直接用变量循环。
+
+> dp可以试着降维
+
+# 72 minDistance
+
+一般是二维数组，但是可以用一维数组实现：
+
+```python
+    def minDistanceBest(self, word1: str, word2: str) -> int:
+        m = len(word1)
+        n = len(word2)
+        dp = list(range(n+1))
+        for i in range(m):
+            left_up = dp[0]
+            dp[0]= i+1
+            for j in range(n):
+                dp[j+1], left_up= min(dp[j]+1, dp[j+1]+1, left_up+(int(word1[i]!=word2[j]))), dp[j+1]
+        return dp[-1]
+```
+
+
+
+
+
+
+
+
+
 # 239 maxSlidingWindow
 
 ## 方法一：维护一个最大二叉堆
