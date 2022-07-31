@@ -245,6 +245,12 @@ $$
 
 > [Python 中 Dict 的实现](https://www.cnblogs.com/Xuuuuuu/p/13894009.html)
 
+![](https://i.imgur.com/IpYEuWV.png)
+
+![](https://i.imgur.com/QkNJM0i.png)
+
+可以用两个列表实现，一对k-v有相同的index。
+
 
 
 
