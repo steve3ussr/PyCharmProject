@@ -61,10 +61,48 @@ class SortUtils(object):
 
     @staticmethod
     def insertionSort(alist):
-        pass
+        if len(alist) <= 1:
+            return alist
+        else:
+            pass
+
+        for i in range(0, len(alist) - 1):
+            tmp = alist[i + 1]
+            flg = 1
+            for j in range(i, -1, -1):
+                if alist[j] > tmp:
+                    alist[j + 1] = alist[j]
+                else:
+                    alist[j + 1] = tmp
+                    flg = 0
+                    break
+            if flg:
+                alist[0] = tmp
+
+        return alist
+
+    @staticmethod
+    def shellSort(alist):
+        if len(alist) <= 1:
+            return alist
+        else:
+            pass
+
+        def gapInsertSort(start, step):
+            pass
+
+        gap_cnt = len(alist)//2
+        for i in range(gap_cnt):
+            gapInsertSort(i, gap_cnt)
+            # TODO: unfinished
+
+
+
+
+
 
 
 if __name__ == '__main__':
     todo_list = [6, 5, 1, 2, 3]
-    res = SortUtils().selectionSort(todo_list)
+    res = SortUtils().insertionSort(todo_list)
     print(res)
