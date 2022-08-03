@@ -5,8 +5,8 @@ class SortUtils(object):
     def __init__(self):
         pass
 
-    @staticmethod
-    def bubbleSort(alist):
+    @classmethod
+    def bubbleSort(cls, alist):
         if len(alist) <= 1:
             return alist
         else:
@@ -21,8 +21,8 @@ class SortUtils(object):
 
         return alist
 
-    @staticmethod
-    def shortBubbleSort(alist):
+    @classmethod
+    def shortBubbleSort(cls, alist):
         if len(alist) <= 1:
             return alist
         else:
@@ -44,8 +44,8 @@ class SortUtils(object):
 
         return alist
 
-    @staticmethod
-    def selectionSort(alist):
+    @classmethod
+    def selectionSort(cls, alist):
         if len(alist) <= 1:
             return alist
         else:
@@ -61,8 +61,8 @@ class SortUtils(object):
 
         return alist
 
-    @staticmethod
-    def insertionSort(alist):
+    @classmethod
+    def insertionSort(cls, alist):
         if len(alist) <= 1:
             return alist
         else:
@@ -83,8 +83,8 @@ class SortUtils(object):
 
         return alist
 
-    @staticmethod
-    def shellSort(alist):
+    @classmethod
+    def shellSort(cls, alist):
         if len(alist) <= 1:
             return alist
         else:
@@ -124,8 +124,8 @@ class SortUtils(object):
 
         return alist
 
-    @staticmethod
-    def mergeSort(alist):
+    @classmethod
+    def mergeSort(cls, alist):
 
         def _mergeSort(split_list):
             if len(split_list) <= 1:
@@ -158,8 +158,8 @@ class SortUtils(object):
             alist = _mergeSort(alist)
         return alist
 
-    @staticmethod
-    def mergeSort_Opt(alist):
+    @classmethod
+    def mergeSort_Opt(cls, alist):
 
         def _mergeSort_Opt(st, end):
             if (end - st + 1) <= 1:
@@ -172,7 +172,7 @@ class SortUtils(object):
             i = st
             j = mid_index
             k = 0
-            tmp_list = [None] * (end-st+1)
+            tmp_list = [None] * (end - st + 1)
 
             while i <= mid_index - 1 and j <= end:
                 if alist[i] < alist[j]:
@@ -193,13 +193,8 @@ class SortUtils(object):
                     tmp_list[k] = alist[j]
                     j += 1
                     k += 1
-            """
-            assert (len(tmp_list) == (end - st + 1)), f'{st} -> {mid_index} -> {end} ERROR, {len(tmp_list)}'
 
-            for i, v in enumerate(tmp_list):
-                alist[st + i] = v
-            """
-            alist[st:end+1] = tmp_list
+            alist[st:end + 1] = tmp_list
 
         if len(alist) <= 1:
             pass
@@ -207,50 +202,59 @@ class SortUtils(object):
             _mergeSort_Opt(0, len(alist) - 1)
         return alist
 
-    @staticmethod
-    def quickSort(alist):
-        if len(alist) <= 1:
-            return alist
-        else:
-            pass
+    @classmethod
+    def quickSort(cls, alist):
 
         def _quickSort(st, end):
-            if (end-st+1) <= 1:
+            print(f'st = {st}   end = {end}')
+            print(alist)
+            if (end - st + 1) <= 1:
                 return
+            # elif alist[end] == alist[st]:
+             #    return
             else:
                 pass
 
-            left_index = st+1
-            right_index = end
-            base = alist[st]
+            base_idx = st
+            base_val = alist[base_idx]
+            l_idx = st + 1
+            r_idx = end
 
-            while right_index >= left_index:
-                while
+            while True:
+                while l_idx <= r_idx and alist[l_idx] <= base_val:
+                    l_idx += 1
+                while l_idx <= r_idx and alist[r_idx] >= base_val:
+                    r_idx -= 1
 
+                if l_idx <= r_idx:
+                    (alist[l_idx], alist[r_idx]) = (alist[r_idx], alist[l_idx])
+                else:
+                    break
 
+            (alist[base_idx], alist[r_idx]) = (alist[r_idx], alist[base_idx])
+            print(f'st={st} r_idx={r_idx}  |  r_idx+1={r_idx+1} end = {end}')
+            _quickSort(st, r_idx)
+            _quickSort(r_idx + 1, end)
+            return
 
+        _quickSort(0, len(alist) - 1)
+        return alist
 
-
-
-
-            pass
-
-        _quickSort(0, len(alist)-1)
-
-
-
-    @staticmethod
-    def quickSort_Opt(alist):
+    @classmethod
+    def quickSort_Opt(cls, alist):
         pass
 
 
 if __name__ == '__main__':
     import random
+
     todo_list = []
-    for i in range(100):
+    for i in range(20):
         todo_list.append(int(random.random() * 1000))
+    print(todo_list)
     # todo_list = [6, 5, 1, 2, 3]
 
-    todo_list = [54,26,93,17,77,31,44,55,20]
-    res = SortUtils().shellSort(todo_list)
+    # todo_list = [54, 26, 93, 17, 77, 31, 44, 55, 20]    todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
+    todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
+    res = SortUtils.quickSort(todo_list)
     print(res)
