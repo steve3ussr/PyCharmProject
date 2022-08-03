@@ -8,7 +8,7 @@ class testcase_collection(unittest.TestCase):
         self.cls = SortUtils
         self.case = dict()
         for i in range(1, 11):
-            tmp_1 = [int(random.random() * 1000) for x in range(1, 5000)]
+            tmp_1 = [int(random.random() * 1000) for x in range(1, 1000)]
             tmp_2 = sorted(tmp_1)
             self.case[i] = (tmp_1, tmp_2)
 
@@ -40,16 +40,24 @@ class testcase_collection(unittest.TestCase):
         for k, v in self.case.items():
             self.assertEqual(self.cls.mergeSort_Opt(v[0]), v[1], msg=f'MERGE SORT(low memo ver.) case: {k} ERROR')
 
+    def test_quickSort(self):
+        for k, v in self.case.items():
+            self.assertEqual(self.cls.quickSort(v[0]), v[1], msg=f'QUICK SORT case: {k} ERROR')
+
+    def test_quickSort_Opt(self):
+        for k, v in self.case.items():
+            self.assertEqual(self.cls.quickSort_Opt(v[0]), v[1], msg=f'QUICK SORT(OPT ver.) case: {k} ERROR')
+
+    def test_timSort(self):
+        for k, v in self.case.items():
+            self.assertEqual(sorted(v[0]), v[1], msg=f'QUICK SORT case: {k} ERROR')
+
     def tearDown(self):
         print('--- PARTIAL --- DONE ---')
         """         
-         def test_quickSort(self):
-             for k, v in self.case.items():
-                 self.assertEqual(self.cls.quickSort(v[0]), v[1], msg=f'QUICK SORT case: {k} ERROR')
+         
 
-         def test_quickSort_Opt(self):
-             for k, v in self.case.items():
-                 self.assertEqual(self.cls.quickSort_Opt(v[0]), v[1], msg=f'QUICK SORT(OPT ver.) case: {k} ERROR')
+         
 
 
 

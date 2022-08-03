@@ -206,12 +206,8 @@ class SortUtils(object):
     def quickSort(cls, alist):
 
         def _quickSort(st, end):
-            print(f'st = {st}   end = {end}')
-            print(alist)
-            if (end - st + 1) <= 1:
+            if end <= st:
                 return
-            # elif alist[end] == alist[st]:
-             #    return
             else:
                 pass
 
@@ -232,8 +228,7 @@ class SortUtils(object):
                     break
 
             (alist[base_idx], alist[r_idx]) = (alist[r_idx], alist[base_idx])
-            print(f'st={st} r_idx={r_idx}  |  r_idx+1={r_idx+1} end = {end}')
-            _quickSort(st, r_idx)
+            _quickSort(st, r_idx-1)
             _quickSort(r_idx + 1, end)
             return
 
@@ -242,19 +237,53 @@ class SortUtils(object):
 
     @classmethod
     def quickSort_Opt(cls, alist):
-        pass
+
+        def switch(a, b):
+            (alist[a], alist[b]) = (alist[b], alist[a])
+
+        def _quickSort_Opt(st, end):
+            if end <= st:
+                return
+            else:
+                pass
+
+            base_idx = st
+            base_val = alist[base_idx]
+            l_idx = st + 1
+            r_idx = end
+
+            while True:
+                while l_idx <= r_idx and alist[l_idx] <= base_val:
+                    l_idx += 1
+                while l_idx <= r_idx and alist[r_idx] >= base_val:
+                    r_idx -= 1
+
+                if l_idx <= r_idx:
+                    switch(l_idx, r_idx)
+                else:
+                    break
+
+            switch(base_idx, r_idx)
+            _quickSort_Opt(st, r_idx-1)
+            _quickSort_Opt(r_idx + 1, end)
+            return
+
+        _quickSort_Opt(0, len(alist) - 1)
+        return alist
 
 
 if __name__ == '__main__':
     import random
 
     todo_list = []
-    for i in range(20):
+    for i in range(20000):
         todo_list.append(int(random.random() * 1000))
     print(todo_list)
     # todo_list = [6, 5, 1, 2, 3]
 
-    # todo_list = [54, 26, 93, 17, 77, 31, 44, 55, 20]    todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
-    todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
+    # todo_list = [54, 26, 93, 17, 77, 31, 44, 55, 20]
+    # todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
     res = SortUtils.quickSort(todo_list)
+    print('YES!') if res == sorted(todo_list) else print('NO!')
     print(res)
+    print(sorted(todo_list))
