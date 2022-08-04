@@ -21,18 +21,18 @@ class MinBinaryHeap(object):
         if childLeft > self.length:  # childLeft non exists
             return None
         elif childRight > self.length:  # only childLeft exists
-            print(f"{parent}父节点的最小子节点为{childLeft}")
+            # print(f"{parent}父节点的最小子节点为{childLeft}")
             return childLeft
         else:  # both exist
             minChild = childLeft if self.heap[childLeft] <= self.heap[childRight] else childRight
-            print(f"{parent}父节点的最小子节点为{minChild}")
+            # print(f"{parent}父节点的最小子节点为{minChild}")
             return minChild
 
     def switchDown(self, parent):
         # WHILE (childMin exists) and (heap is non-ordered)
         while (childMin := self.minChild(parent)) and (self.heap[parent] > self.heap[childMin]):
             (self.heap[parent], self.heap[childMin]) = (self.heap[childMin], self.heap[parent])
-            print(f"switch 父节点{parent} 和 子节点{childMin} Done")
+            # print(f"switch 父节点{parent} 和 子节点{childMin} Done")
             parent = childMin
 
     def insert(self, k):

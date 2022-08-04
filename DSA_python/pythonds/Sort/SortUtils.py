@@ -1,4 +1,7 @@
 import math
+import pprint
+
+from DSA_python.pythonds.trees.MinBinaryHeap import MinBinaryHeap
 
 
 class SortUtils(object):
@@ -45,6 +48,37 @@ class SortUtils(object):
         return alist
 
     @classmethod
+    def biBubbleSort(cls, alist):
+        if len(alist) <= 1:
+            return alist
+        else:
+            pass
+
+        def switch(a, b):
+            (alist[a], alist[b]) = (alist[b], alist[a])
+
+        for i in range(len(alist)//2):
+            flg = 0
+            for j_pos in range(i, len(alist)-1-i):
+                if alist[j_pos] > alist[j_pos+1]:
+                    switch(j_pos, j_pos+1)
+                    flg = 1
+
+            for j_neg in range(len(alist)-1-i, i, -1):
+                if alist[j_neg] < alist[j_neg-1]:
+                    switch(j_neg, j_neg-1)
+                    flg = 1
+
+            if flg:
+                pass
+            else:
+                return alist
+
+        return alist
+
+
+
+    @classmethod
     def selectionSort(cls, alist):
         if len(alist) <= 1:
             return alist
@@ -84,7 +118,7 @@ class SortUtils(object):
         return alist
 
     @classmethod
-    def shellSort(cls, alist):
+    def shellSort(cls, alist, base=3):
         if len(alist) <= 1:
             return alist
         else:
@@ -111,8 +145,8 @@ class SortUtils(object):
                     alist[st] = tmp
 
         def _gen_step_list():
-            n = len(alist)
-            max_step = int(math.log(len(alist) + 1, 3))
+            n = len(alist)/2*(base-1)+1
+            max_step = int(math.log(n, base))
             return list(range(1, max_step + 1))
 
         step_list = _gen_step_list()
@@ -210,7 +244,6 @@ class SortUtils(object):
                 return
             else:
                 pass
-
             base_idx = st
             base_val = alist[base_idx]
             l_idx = st + 1
@@ -228,7 +261,7 @@ class SortUtils(object):
                     break
 
             (alist[base_idx], alist[r_idx]) = (alist[r_idx], alist[base_idx])
-            _quickSort(st, r_idx-1)
+            _quickSort(st, r_idx - 1)
             _quickSort(r_idx + 1, end)
             return
 
@@ -239,7 +272,20 @@ class SortUtils(object):
     def quickSort_Opt(cls, alist):
 
         def switch(a, b):
-            (alist[a], alist[b]) = (alist[b], alist[a])
+            if a == b:
+                return
+            else:
+                (alist[a], alist[b]) = (alist[b], alist[a])
+
+        def base_decide(st, end):
+            mid_idx = (end - st + 1) // 2 + st
+
+            if alist[st] <= alist[mid_idx] <= alist[end] or alist[end] <= alist[mid_idx] <= alist[st]:
+                return mid_idx
+            elif alist[mid_idx] <= alist[st] <= alist[end] or alist[end] <= alist[st] <= alist[mid_idx]:
+                return st
+            else:
+                return end
 
         def _quickSort_Opt(st, end):
             if end <= st:
@@ -247,14 +293,17 @@ class SortUtils(object):
             else:
                 pass
 
-            base_idx = st
+            base_idx = base_decide(st, end)
             base_val = alist[base_idx]
+            switch(base_idx, st)
+            base_idx = st
             l_idx = st + 1
             r_idx = end
 
             while True:
                 while l_idx <= r_idx and alist[l_idx] <= base_val:
                     l_idx += 1
+
                 while l_idx <= r_idx and alist[r_idx] >= base_val:
                     r_idx -= 1
 
@@ -264,26 +313,90 @@ class SortUtils(object):
                     break
 
             switch(base_idx, r_idx)
-            _quickSort_Opt(st, r_idx-1)
+            _quickSort_Opt(st, r_idx - 1)
             _quickSort_Opt(r_idx + 1, end)
             return
 
         _quickSort_Opt(0, len(alist) - 1)
         return alist
 
+    @classmethod
+    def bucketSort(cls, alist, size=100):
+        def hash_func(x, base):
+            return x // base
+
+        if len(alist) <= 1:
+            return alist
+        else:
+            pass
+
+        bucket = [[] for i in range(size)]
+        for val in alist:
+            bucket[hash_func(val, size)].append(val)
+
+        res_list = []
+        for v in bucket:
+            res_list.extend(cls.quickSort_Opt(v))
+
+        return res_list
+
+    @classmethod
+    def heapSort(cls, alist):
+        aHeap = MinBinaryHeap()
+        aHeap.buildHeap(alist)
+        return [aHeap.delMin() for i in range(len(alist))]
+
+    @classmethod
+    def radixSort(cls, alist):
+        if len(alist) <= 1:
+            return alist
+        else:
+            pass
+
+        max_digit = len(str(max(alist)))
+        digit_dict = [[] for _ in range(10)]
+
+        def extDigit(num, digit):
+            tmp1 = num // (10 ** digit)
+            tmp2 = num // (10 ** (digit - 1))
+            return tmp2 - tmp1 * 10
+
+        # for dgt in range(max_digit, 0, -1):
+        for dgt in range(1, max_digit + 1):
+            for val in alist:
+                digit_dict[extDigit(val, dgt)].append(val)
+            alist = []
+            for _ in range(10):
+                alist.extend(digit_dict[_])
+                digit_dict[_] = []
+        return alist
+
+    @classmethod
+    def countingSort(cls, alist):
+        max_num = max(alist)
+        res_dict = {_: 0 for _ in range(max_num + 1)}
+
+        for val in alist:
+            res_dict[val] += 1
+
+        res_lst = []
+        for _ in range(max_num + 1):
+            res_lst.extend([_] * res_dict[_])
+
+        return res_lst
+
 
 if __name__ == '__main__':
     import random
 
     todo_list = []
-    for i in range(20000):
-        todo_list.append(int(random.random() * 1000))
-    print(todo_list)
-    # todo_list = [6, 5, 1, 2, 3]
+    for i in range(10001):
+        todo_list.append(int(random.random() * 10))
 
-    # todo_list = [54, 26, 93, 17, 77, 31, 44, 55, 20]
-    # todo_list = [722, 192, 23, 392, 354, 957, 16, 346, 841, 997, 658, 875, 229, 101, 981, 343, 392, 576, 45, 452]
-    res = SortUtils.quickSort(todo_list)
+    todo_list = list(range(1, 21))
+    todo_list.reverse()
+    res = SortUtils.biBubbleSort(todo_list)
     print('YES!') if res == sorted(todo_list) else print('NO!')
     print(res)
+    print(len(res))
     print(sorted(todo_list))
