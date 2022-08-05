@@ -842,8 +842,68 @@ put：overload，需要在插入的同时更新所有父节点的平衡因子。
 > 为了实现稀疏连接的图，更高效的方式是使用邻接表。
 >
 > 在邻接表实现中，我们为图对象的所有顶点保存一个主列表，同时为每一个顶点对象都维护一个列表，其中记录了与它相连的顶点。在对 Vertex 类的实现中，我们使用字典（而不是列表），字典的键是顶点，值是权重。
+>
+> ``` python
+> class Graph -> list of vertices
+> 
+> class Vertex -> dict of info: {neighbor vertex: edge weight}
+> ```
+>
+> 
 
 ![](https://i.imgur.com/yRww44b.png)
+
+#### Vertex类实现
+
+``` python
+self.id: usually a string
+self.connectedTo: a dict of nbr: weight
+
+methods:
+    addNeighbor
+    __str__, __repr__
+    getConnections: return self.connectedTo.keys()
+	getId: self.id
+    getWeight(nbr): look up dict
+```
+
+#### Graph类实现
+
+``` python
+self.verList = {}
+self.numVertices
+
+methods:
+    addVertex(key): add a vertex without edge
+    getVertex(key): return self.verList.get(key)
+	__contains__: reload in
+    __iter__: reload, iter(self.vertList.values())
+    addEdge(from, to, weight): ENSURE from and to in self first
+    getVertices: return dict.keys()
+    
+```
+
+> key 就是 id
+
+## 7.4 BFS(Breadth First Search): Word Ladder Game
+
+### 7.4.1 Intro
+
+[Word Ladder](https://en.wikipedia.org/wiki/Word_ladder)：该游戏有一个起始词和一个终止词，游戏者需要发现一条连接两个词的词汇链，**词汇链上的两个相邻词只差一个字母**。游戏者一般是更改起始词中的一个字母，获得一个新词，然后继续更改所得的新词中的某个字母，再获得一个新词，最终获得终止词。 
+
+### 7.4.2 Build Graph
+
+![](https://i.imgur.com/gLv5qh6.png)
+
+*A graph without weight and direction*
+
+为了构建这个图，需要准备一个单词列表。对于每个单词，和其他单词比较是否只相差一个字母：正确的话就创建一条边。**但这个想法的时间复杂度是** $O(n^2)$。
+
+
+
+
+
+
 
 
 

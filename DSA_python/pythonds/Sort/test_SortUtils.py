@@ -5,8 +5,8 @@ from copy import copy
 
 
 rand_num_dict = dict()
-for i in range(1, 5001):
-    tmp_1 = [int(random.random()*1000) for x in range(1, 100)]
+for i in range(1, 101):
+    tmp_1 = [int(random.random()*1000) for x in range(1, 1000)]
     tmp_2 = sorted(tmp_1)
     rand_num_dict[i] = (tmp_1, tmp_2)
 
