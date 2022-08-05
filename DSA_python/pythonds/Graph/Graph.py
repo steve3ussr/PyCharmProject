@@ -3,32 +3,36 @@ from .Vertex import Vertex
 
 class Graph(object):
     def __init__(self):
-        self.vertList = {}
+        self.vertDict = {}
         self.numVertices = 0
 
     def addVertex(self, key):
-        self.numVertices += 1
-        self.vertList[key] = Vertex(key)
-        return self.vertList[key]
+        if key in self:
+            return
 
-    def getVertex(self, item):
-        return self.vertList.get(item)
+        self.numVertices += 1
+        tmp = Vertex(key)
+        self.vertDict[key] = tmp
+        return tmp
+
+    def getVertex(self, item) -> Vertex:
+        return self.vertDict.get(item)
 
     def __contains__(self, item):
-        return item in self.vertList
+        return item in self.vertDict
 
     def addEdge(self, fromVtx, toVtx, weight=0):
-        if fromVtx not in self.vertList:
+        if fromVtx not in self.vertDict:
             self.addVertex(fromVtx)
-        if toVtx not in self.vertList:
+        if toVtx not in self.vertDict:
             self.addVertex(toVtx)
-        self.vertList[fromVtx].addNeighbor(self.vertList[toVtx], weight)
+        self.vertDict[fromVtx].addNeighbor(self.vertDict[toVtx], weight)
 
     def getVertices(self):
-        return self.vertList.keys()
+        return self.vertDict.keys()
 
     def __iter__(self):
-        return iter(self.vertList.values())
+        return iter(self.vertDict.values())
 
 
 

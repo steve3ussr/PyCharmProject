@@ -870,7 +870,7 @@ methods:
 #### Graph类实现
 
 ``` python
-self.verList = {}
+self.verList = {id: type<'Vertex'>}
 self.numVertices
 
 methods:
@@ -898,6 +898,24 @@ methods:
 *A graph without weight and direction*
 
 为了构建这个图，需要准备一个单词列表。对于每个单词，和其他单词比较是否只相差一个字母：正确的话就创建一条边。**但这个想法的时间复杂度是** $O(n^2)$。
+
+所以：
+
+1. 先筛选和目标单词有关的词库，比如把四个字母的单词都筛选出来；
+2. 对于每个单词，比如 shit，分别匹配满足`.hit/s.it/sh.t/shi.`的单词，*把他们分别放进 4 个篮子里*；
+3. 对于每个篮子里的单词，都可以通过一个字母来转换，所以没个篮子内部应该相互连接；
+
+### 7.4.3 BFS Realize
+
+
+
+
+
+
+
+
+
+
 
 
 
