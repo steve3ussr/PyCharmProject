@@ -70,17 +70,22 @@ if __name__ == '__main__':
             print(f'{(end-st) * 1000}ms')
         return timer_inner
 
+
     @timer
     def BFS_main():
-        aGraph = buildGraphWordLadder('fool', 'sage')
-        BFS_wordLadder(aGraph.getVertex('fool'))
-        backTraverse(aGraph.getVertex('sage'))
+        for i in range(31):
+            aGraph = buildGraphWordLadder('fool', 'sage')
+            BFS_wordLadder(aGraph.getVertex('fool'))
+            backTraverse(aGraph.getVertex('sage'))
+            del aGraph
 
     @timer
     def Book_main():
-        aGraph = buildGraphWordLadder('fool', 'sage')
-        Book_wordLadder(aGraph.getVertex('fool'))
-        backTraverse(aGraph.getVertex('sage'))
+        for i in range(31):
+            aGraph = buildGraphWordLadder('fool', 'sage')
+            Book_wordLadder(aGraph.getVertex('fool'))
+            backTraverse(aGraph.getVertex('sage'))
+            del aGraph
 
     BFS_main()
-    #Book_main()
+    Book_main()

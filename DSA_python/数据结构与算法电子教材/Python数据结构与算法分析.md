@@ -907,11 +907,27 @@ methods:
 
 ### 7.4.3 BFS Realize
 
+给 vertex 类增加几个属性：
 
+``` python
+distance: 第一个 vertex 是0, 第一层是1, 以此类推
+predecessor: 标记自己的上级
+accessed: 该节点是否被访问过, 每一层只访问未被访问过的
+```
 
+如果发现某个节点已经被访问过，说明存在更短的路径，所以不应该再次访问：所以能知道是最短路径的长度。
 
+`predecessor`的作用是回溯，这样就可以知道**具体的路径**。
 
+两种实现方法，在 python 里没啥区别：
 
+![](https://i.imgur.com/2LhJ106.jpg)
+
+## 7.5 DFS(Depth First Search): Knight's Tour
+
+### 7.5.1 Intro
+
+[骑士周游问题](https://en.wikipedia.org/wiki/Knight%27s_tour)
 
 
 
