@@ -5,6 +5,7 @@ class Graph(object):
     def __init__(self):
         self.vertDict = {}
         self.numVertices = 0
+        self.numEdges = 0
 
     def addVertex(self, key):
         if key in self:
@@ -22,6 +23,7 @@ class Graph(object):
         return item in self.vertDict
 
     def addEdge(self, fromVtx, toVtx, weight=0):
+        self.numEdges += 1
         if fromVtx not in self.vertDict:
             self.addVertex(fromVtx)
         if toVtx not in self.vertDict:

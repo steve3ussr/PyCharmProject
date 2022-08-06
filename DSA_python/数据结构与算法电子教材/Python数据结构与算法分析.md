@@ -6,7 +6,7 @@
 - P130，15；看了解析才会；
 - P160~162，搜索算法；
 - BST iter；
-- 
+- biNodelist
 
 # 1 导论
 
@@ -927,15 +927,127 @@ accessed: 该节点是否被访问过, 每一层只访问未被访问过的
 
 ### 7.5.1 Intro
 
-[骑士周游问题](https://en.wikipedia.org/wiki/Knight%27s_tour)
+[骑士周游问题](https://en.wikipedia.org/wiki/Knight%27s_tour)：指给定一个棋盘，骑士可以走日字，问怎么走才能不重复地遍历全部格子。
+
+### 7.5.3 Realize(Basic Method)
+
+用 Stack 表示待探索的队列。每次递归，将栈顶的元素作为当前元素，并将当前元素标记为“已访问”。
+
+1. 递归退出条件：遍历路径数量等于期望值；
+2. 递归缩小条件：对于每一个潜在的下一步，push 并递归；
+3. 回溯条件：找到终点，或者没有下一步；
+4. 如果对所有子元素，都无法找到终点，则将该节点标记为“未访问”，pop
+
+### 7.5.4 Time Complexity Analysis(Basic Method)
+
+最坏的情况下，需要遍历所有可能的路径才行。
+
+假设棋盘是8864个格子，看成一棵树的话，需要找到深度63的分支；
+
+每个父节点可能有2~8个子节点，所以时间复杂度是$O(k^n)$的：$k$是平均每个父节点有多少子节点；$n$是层数。指数阶的算法，非常耗时。
+
+![](https://i.imgur.com/CJGOC1l.png)
 
 
 
+### 7.5.tmp1 启发式算法技术
+
+> 我们称利用已有知识来加速算法为启发式技术。
+
+Warnsdorff 算法：
+
+从上图可以发现，边缘格子的潜在子节点更少。如果我们对当前节点的子节点排个顺序，假如是子节点的潜在走法从多到少，那每次都优先遍历靠近中间的节点，因为中间的走法更多；
+
+为了保证骑士能尽快到达边边角角，**对当前节点的子节点按照可能的走法数量从小到大排序。**
+
+> 快了好多！
 
 
 
+### 7.5.5 Realize(General Method)
+
+之前的骑士周游问题，最终创建了一棵没有分支的深度优先搜索树，是一种特殊情况；通用的深度优先搜索更简单。
+
+>一次深度优先搜索甚至能够创建多棵深度优先搜索树，我们称之为**深度优先森林**。
+>
+>和宽度优先搜索类似，深度优先搜索也利用**前驱连接**来构建树。
+
+在 `Vertex` 中增加两个属性：第一次探索到该点的时间，和结束探索该点的时间。
+
+创建一个新类：`DFSGraph(Graph)`。
+
+``` python
+class DFSGraph(Graph):
+    def __init__(self):
+        super().__init__()
+        self.time = 0
+
+    def dfs(self):
+        for vtx in self:
+            if not vtx.accessed: 
+                self.dfsVisit(vtx)
+        # 为了不遗漏节点，创建了多棵树；
+        # 如果某个节点已经存在于某棵树内：
+        # 就不会以其为根节点创建树了
+
+    def dfsVisit(self, stVtx: Vertex):
+        self.time += 1
+        stVtx.accessed = True
+        stVtx.disTime = self.time
+
+        for nextVtx in stVtx.getConnections():
+            if nextVtx.accessed:
+                continue
+            else:
+                next.pred = stVtx
+                self.dfsVisit(nextVtx)
+        self.time += 1
+        stVtx.finTime = self.time
+```
+
+关于访问时间的一个示意图：
+
+![](https://i.imgur.com/oEmjxmj.png)
+
+**括号特性：**DFS树中的每个子节点的时间都包含在父节点时间之内。
+
+## 7.6 拓扑排序
+
+> 为了展示计算机科学家可以将几乎所有问题都转换成图问题，让我们来考虑如何制作一批松饼。配方十分简单：一个鸡蛋、一杯松饼粉、一勺油，以及3/4 杯牛奶。为了制作松饼，需要加热平底锅，并将所有原材料混合后倒入锅中。当出现气泡时，将松饼翻面，继续煎至底部变成金黄色。在享用松饼之前，还会加热一些枫糖浆。 
+
+![](https://i.imgur.com/VltHiTY.png)
+
+> **拓扑排序**根据有向无环图生成一个包含所有顶点的线性序列，使得如果图G 中有一条边为`v->w`，那么顶点 v 排在顶点 w之前：
+>
+> 因此要想达到 w，就得先达到 v：***意味着应该先做 v：***
+>
+> 而**父节点的结束时间晚于子节点**，因此先做结束时间最晚的，最后做的结束时间最早的相当于叶子节点。
 
 
+
+> 在很多应用中，**有向无环图被用于表明事件优先级。**
+>
+> 制作松饼只是其中一个例子，其他例子还包括软件项目调度、优化数据库查询的优先级表，以及矩阵相乘。
+
+![](https://i.imgur.com/swJ3ubo.png)
+
+*根据结束时间从大到小排列*
+
+
+
+## 7.7 强连通单元(Strongly Connected Algorithm)
+
+> 强连通单元图算法，可以找出图中高度连通的顶点簇：
+>
+> 对于图$G$，强连通单元$C$为最大的顶点子集$C\subset V$，其中对于每一对顶点$v,w\in C$，都有一条从$v$到$w$的路径和一条从$w$到$v$的路径。
+>
+> **然后就可以简化图**
+
+![](https://i.imgur.com/UZ2bzUG.png)
+
+![](https://i.imgur.com/mCI9Piw.png)
+
+### 7.7.1 Tarjan 强连通分量算法: Tarjan's Strongly Connected Components Algorithm
 
 
 

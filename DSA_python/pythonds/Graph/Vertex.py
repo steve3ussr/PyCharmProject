@@ -5,6 +5,8 @@ class Vertex(object):
         self.__distance = 0
         self.__predecessor = None
         self.__accessed = False
+        self.__discoverTime = None
+        self.__finishTime = None
 
     def addNeighbor(self, nbr, weight=0):
         self.connectedTo[nbr] = weight
@@ -46,5 +48,22 @@ class Vertex(object):
     @accessed.setter
     def accessed(self, i):
         self.__accessed = i
+
+    @property
+    def disTime(self):
+        return self.__discoverTime
+
+    @disTime.setter
+    def disTime(self, i):
+        self.__discoverTime = i
+
+    @property
+    def finTime(self):
+        return self.__finishTime
+
+    @finTime.setter
+    def finTime(self, i):
+        self.__finishTime = i
+
 
 
