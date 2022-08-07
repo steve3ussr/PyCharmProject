@@ -1047,7 +1047,24 @@ class DFSGraph(Graph):
 
 ![](https://i.imgur.com/mCI9Piw.png)
 
-### 7.7.1 Tarjan 强连通分量算法: Tarjan's Strongly Connected Components Algorithm
+### 7.7.1 强连通算法: Normal
+
+> 不懂原理
+
+**转置图：把有向图里的边都反过来**
+
+![](https://i.imgur.com/KQHyeec.png)
+
+1. 正常建一个DFSGraph，正常`dfs()`后，把各节点按照**结束访问时间递减**排序；
+2. 把上一步得到的各节点 `id` ，和反向的 edge建立一个转置图；
+3. 对该转置图正常 `dfs()`，就会按照期望的顺序访问节点；
+4. 得到的森林就是SCCs。
+
+
+
+
+
+### 7.7.2 Tarjan 强连通分量算法: Tarjan's Strongly Connected Components Algorithm
 
 
 

@@ -10,6 +10,7 @@ class DFSGraph(Graph):
     def dfs(self):
         for vtx in self:
             if not vtx.accessed:
+                print(vtx.id)
                 self.dfsVisit(vtx)
 
     def dfsVisit(self, stVtx: Vertex):
