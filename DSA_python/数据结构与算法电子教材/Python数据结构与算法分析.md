@@ -1047,7 +1047,7 @@ class DFSGraph(Graph):
 
 ![](https://i.imgur.com/mCI9Piw.png)
 
-### 7.7.1 强连通算法: Normal
+### 7.7.1 强连通算法: Kosaraju
 
 > 不懂原理
 
@@ -1065,6 +1065,104 @@ class DFSGraph(Graph):
 
 
 ### 7.7.2 Tarjan 强连通分量算法: Tarjan's Strongly Connected Components Algorithm
+
+> Tarjan算法用于有向图，用于找强连通区域，割边等，属于图论内容。
+
+![](https://i.imgur.com/ajL5QdJ.png)
+
+![](https://i.imgur.com/v6EOrOZ.png)
+
+基本方法：
+
+
+
+1. 给每个顶点分配一个id，可以用第一次访问的时间，`dfn(depth first number)`；
+2. 每个顶点还有一个`low`值，表示当前node能到达的node中最小的id（包括它自己)。
+3. **具有相同 `low` 值的在同一个SCC；`low == dfn` 的是根节点**；
+
+---
+
+**`dfn`已经有了，问题在于怎么更新 `low`**：
+
+三个点：
+
+1. 不能访问重复节点：这点通过`vertex.accessed`已经实现，和普通DFS差不多；
+2. `low`的初值是`dfn`；
+3. 对于每个顶点，在遍历所有下家时，**实时更新`low`值**，其`low`应为本身和下家`low`的最小值；
+
+**和下家是否在栈里没有关系！如果下家在栈里就pop，不能保证当前顶点还有未遍历的边！！**
+
+一个实例：
+
+![](https://i.imgur.com/4z33n0g.png)
+
+![](https://i.imgur.com/7N1klUZ.png)![](https://i.imgur.com/8y34qW7.png)![](https://i.imgur.com/GiRFa5e.png)![](https://i.imgur.com/2OyvgKV.png)![](https://i.imgur.com/AldYHOn.png)
+
+``` python
+def dfsTarjan(self, graph):
+
+    for vtx in graph:  # 确保不遗漏
+        if not vtx.accessed:
+            self._dfsTarjan(graph, vtx)
+            
+    # 先按照 low 排序(同一SCC在一起)，再按照 dfn 排序
+    tmp = sorted(graph, key=lambda x: (x.low, x.dfn))
+    # 将森林按照 dfn==low 的 root: [相同low值的元素] k-v 组成 dict
+    root = None
+        for _ in tmp:
+            if _.low == _.dfn:
+                graph.roots[_] = []
+                root = _
+            else:
+                graph.roots[root].append(_)
+            
+def _dfsTarjan(self, graph, stVtx: Vertex):
+    graph.time += 1
+    stVtx.dfn = graph.time
+    stVtx.low = stVtx.dfn
+    stVtx.accessed = True
+
+    for nextVtx in stVtx.getConnections():
+        if not nextVtx.accessed:
+            nextVtx.pred = stVtx
+            self._dfsTarjan(graph, nextVtx)
+
+        stVtx.low = min(stVtx.low, nextVtx.low)
+```
+
+---
+
+事实上，上面的代码和 Stack 没啥关系......但后果是，后续还需要排序来确定，增加了时间复杂度。
+
+**更好的做法是，利用 Stack 来实现：**
+
+先不pop，而是在每一次递归，遍历完节点 `currVtx`的下家后：
+
+1. 检查`cuurVtx` 的 `low==dfn`；
+2. 如果`True`，说明是这是个 `root` ，而在栈里可能还有若干个SCC顶点，堆在根顶点的上面；
+3. 那就 `pop`，直到把`low==dfn` 的退出来；
+
+因为Stack里的顺序是访问的顺序。如果True，说明不可能再访问到前序节点；如果False说明还没确定根，暂时先存在栈里。
+
+只需要在辅助函数最后加上：
+
+``` python
+if stVtx.dfn == stVtx.low:
+    tmpLst = []
+    while True:
+        tmpVtx = self.stack.pop()
+        if tmpVtx != stVtx:
+            tmpLst.append(tmpVtx)
+        else:
+            graph.roots[stVtx] = tmpLst
+            break
+```
+
+
+
+
+
+
 
 
 

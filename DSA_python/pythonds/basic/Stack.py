@@ -24,7 +24,12 @@ class Stack(object):
     def __str__(self):
         return f"{self.content}"
 
+    def __contains__(self, item):
+        return True if item in self.content else False
+
 
 if __name__ == '__main__':
     s = Stack()
-    print(s.peek())
+    s.push(1)
+    s.push(5)
+    print(1 in s)
