@@ -1160,6 +1160,45 @@ if stVtx.dfn == stVtx.low:
 
 
 
+### 7.7.3 割点、割边、公共祖先(LCA, Lowest Common Ancestor)：Tarjan算法的其他妙用
+
+> **割点(Cut Verteices, Cut Vertex)：**在一个[无向图](https://baike.baidu.com/item/无向图/1680427)中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的[连通分量](https://baike.baidu.com/item/连通分量/290350)增多，就称这个点集为割点集合。如果去掉一个点以及与它连接的边，该点原来所在的图被分成**两部分（不连通）**，则称该点为割点。
+>
+> **割边(Bridge, Cut Edge)：**如果去掉一条边，该边原来所在的图被分成**两部分（不连通）**，则称该点为割边。
+
+![](https://i.imgur.com/6AMO0Pq.png)
+
+1, 割点：
+
+​                 ①该点为根节点时，若子树数量大于一则说明该点为割点（子树数量不等于与该点连接的[边数](https://www.zhihu.com/search?q=边数&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})）。
+
+​                 ②该点不为根节点时，若存在一个儿子节点的low值大于或等于该点的dfn值时（**low[子节点] >= dfn[[父节点](https://www.zhihu.com/search?q=父节点&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})]**），该点为割点（即子节点，无法通过回边，到达某一部分节点（这些节点的dfn值小于父亲节点））。
+
+​    2, 割边：对于任意有边连接的点u，v ，若**low[u] > dfn[v]**，则说明边u-v为一条割边。
+
+
+
+作者：windand
+链接：https://zhuanlan.zhihu.com/p/42281156
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
