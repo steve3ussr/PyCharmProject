@@ -4,8 +4,8 @@ min heap: min element at top
 
 
 class MinBinaryHeap(object):
-    def __init__(self):
-        self.heap = [0]
+    def __init__(self, min_ele=0):
+        self.heap = [min_ele]
         self.length = 0
 
     def minChild(self, parent):
@@ -77,8 +77,11 @@ class MinBinaryHeap(object):
     def __str__(self):
         return f'{self.heap[1:]}'
 
+    def __contains__(self, item):
+        return True if item in self.heap else False
 
-if __name__ == '__main__':
+
+if __name__ == '__main1__':
     # buildHeap
     test_list = [9, 6, 5, 3, 0, 2]
     h = MinBinaryHeap()
@@ -96,40 +99,7 @@ if __name__ == '__main1__':
     minEle = h.delMin()
     print(h)
 
-if __name__ == '__main1__':
-    h = MinBinaryHeap()
-    h.insert(5)
-    h.insert(9)
-    h.insert(11)
-    h.insert(14)
-    h.insert(18)
-    h.insert(19)
-    h.insert(21)
-    h.insert(33)
-    h.insert(17)
-    h.insert(27)
-    print(h)
-    h.insert(7)
-    print(h)
-    h.delMin()
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    h.delMin()
-    print(h)
-    print(h.isEmpty())
+if __name__ == '__main__':
+    q = MinBinaryHeap()
+    q.buildHeap([5, 9, 11, 14, 18, 19, 21, 33, 17, 27])
+    print(q)

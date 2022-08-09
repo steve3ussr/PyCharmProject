@@ -1,8 +1,8 @@
 class Vertex(object):
-    def __init__(self, key):
+    def __init__(self, key, dist=0):
         self.id = key  # usually a string
         self.connectedTo = {}  # other vertices & edge weight
-        self.__distance = 0
+        self.__distance = dist
         self.__predecessor = None
         self.__accessed = False
         self.__discoverTime = None

@@ -1185,17 +1185,41 @@ if stVtx.dfn == stVtx.low:
 
 
 
+## 7.8 最短路径问题: Dijkstra算法
 
+> **考虑权重了开始**
 
+![](https://i.imgur.com/W5WnO73.png)
 
+一个常用的变体是，指定图中一个顶点，求所有顶点到这个指定顶点的最小距离。
 
+适用条件：**无向，无自环**
 
+思路：
 
+1. 构建一个最小堆，将各个顶点按`distance`值排序；`distance`的物理意义是该节点到指定节点的距离；
+2. 将指定顶点弹出来，其`distance=0`；将其作为**当前顶点**；
+3. 对于**和当前节点相连，并且在堆中剩余的顶点**，更新他们的`distance`：
 
+$$
+VERTEX_{distance} = \min\left( VERTEX_{distance},\ <VERTEX,\ Current>_{distance} + Current_{distance} \right)
+$$
 
+4. 也要在堆中更新；
+5. 将堆顶顶点`pop`，作为**当前顶点**；
+6. `Goto 3`，直到堆空。
 
+---
 
+在第3步中，每个顶点的距离，要么是和起始点的直线距离，要么是经过一些不在堆里顶点中转的结果。
 
+还可以在更新`distance`的时候顺便更新`pred`，方便追查具体的路径。
+
+每次循环只更新和当前节点（最近一次确定最短路径的节点）之间相连的节点。
+
+## 7.9 最小生成树：Prim算法
+
+![](https://i.imgur.com/KRlYKyq.png)
 
 
 

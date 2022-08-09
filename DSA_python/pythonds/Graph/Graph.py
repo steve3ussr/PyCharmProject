@@ -7,12 +7,12 @@ class Graph(object):
         self.numVertices = 0
         self.numEdges = 0
 
-    def addVertex(self, key):
+    def addVertex(self, key, dist):
         if key in self:
             return
 
         self.numVertices += 1
-        tmp = Vertex(key)
+        tmp = Vertex(key=key, dist=dist)
         self.vertDict[key] = tmp
         return tmp
 

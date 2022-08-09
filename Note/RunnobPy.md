@@ -2174,6 +2174,28 @@ MRO是一个列表，满足原则：
 
 所以在说`super()`的时候要先提到MRO，否则在多继承情况下，我们不知道调用的是哪个父类中的方法。
 
+---
+
+举例：
+
+``` python
+class B(object)
+class A(B)
+class C(A, B)
+```
+
+默认一个方法会按照顺序查找：要是A有就用A的，要是B有就用B的。
+
+但如果我非要用B的呢？
+
+`super(A, self).method(args)`
+
+因为A的MRO是`[B, ]`
+
+
+
+
+
 # Python 异常处理
 
 ## ErrorClass

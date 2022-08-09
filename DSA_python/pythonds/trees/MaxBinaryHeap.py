@@ -1,9 +1,12 @@
-class MaxBinaryHeap(object):
-    def __init__(self, min_ele=0):
-        self.heap = [min_ele]
-        self.length = 0
+from DSA_python.pythonds.trees.MinBinaryHeap import MinBinaryHeap
 
-    def findChild(self):
+
+class MaxBinaryHeap(MinBinaryHeap):
+    def __init__(self, max_ele=1e9):
+        super(MaxBinaryHeap, self).__init__(max_ele)
+        self.delMax = self.delMin
+
+    def findMax(self):
         return self.heap[1]
 
     def maxChild(self, parent):
@@ -31,39 +34,10 @@ class MaxBinaryHeap(object):
             child = parent
             parent = child // 2
 
-    def delMax(self):
-        if len(self.heap) == 2:  # only has 1 ele
-            return self.heap.pop()
-        else:
-            pass
-
-        self.length -= 1
-        heapMax = self.heap[1]
-        self.heap[1] = self.heap.pop()
-        self.switchDown(1)
-        return heapMax
-
-    def isEmpty(self):
-        return self.length == 0
-
-    def size(self):
-        return self.length
-
-    def buildHeap(self, a_list):
-        self.length += len(a_list)
-        self.heap.extend(a_list)
-        i = len(a_list) // 2  # the last parent node
-        while i > 0:
-            self.switchDown(i)
-            i -= 1
-
-    def __str__(self):
-        return f'{self.heap[1:]}'
-
 
 if __name__ == '__main__':
     # buildHeap
-    test_list = [0, 3, 2, 9, 6, 5]
-    h = MaxBinaryHeap()
-    h.buildHeap(test_list)
-    print(h)
+    print(issubclass(MaxBinaryHeap, MinBinaryHeap))
+    q = MaxBinaryHeap()
+    q.buildHeap([5, 9, 11, 14, 18, 19, 21, 33, 17, 27])
+    print(q)
