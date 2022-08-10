@@ -18,6 +18,9 @@ class Vertex(object):
 
     __repr__ = __str__
 
+    def __iter__(self):
+        return iter(self.getConnections())
+
     def getConnections(self):
         return self.connectedTo.keys()
 
@@ -26,6 +29,9 @@ class Vertex(object):
 
     def getWeight(self, nbr):
         return self.connectedTo.get(nbr)
+
+    def __getitem__(self, nbr):
+        return self.getWeight(nbr)
 
     @property
     def distance(self):

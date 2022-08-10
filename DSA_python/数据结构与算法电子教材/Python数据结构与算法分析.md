@@ -319,7 +319,7 @@ $$
 
 希尔排序也称“递减增量排序”，它对插入排序做了改进，将列表分成数个子列表，并对每
 一个子列表应用插入排序。如何切分列表是希尔排序的关键——并不是连续切分，而是使用增量
-i（有时称作步长）选取所有间隔为i 的元素组成子列表。
+i（有时称作步长）选取所有间隔为 i 的元素组成子列表。
 
 > 其中一个通项公式，可根据数据规模计算各项步长。
 
@@ -1096,7 +1096,15 @@ class DFSGraph(Graph):
 
 ![](https://i.imgur.com/4z33n0g.png)
 
-![](https://i.imgur.com/7N1klUZ.png)![](https://i.imgur.com/8y34qW7.png)![](https://i.imgur.com/GiRFa5e.png)![](https://i.imgur.com/2OyvgKV.png)![](https://i.imgur.com/AldYHOn.png)
+![](https://i.imgur.com/7N1klUZ.png)
+
+![](https://i.imgur.com/8y34qW7.png)
+
+![](https://i.imgur.com/GiRFa5e.png)
+
+![](https://i.imgur.com/2OyvgKV.png)
+
+![](https://i.imgur.com/AldYHOn.png)
 
 ``` python
 def dfsTarjan(self, graph):
@@ -1217,17 +1225,110 @@ $$
 
 每次循环只更新和当前节点（最近一次确定最短路径的节点）之间相连的节点。
 
+``` python
+def Dijkstra(graph, st_vtx_id):
+    
+    # Graph[id] = Vertex inst
+    # Graph.__iter__() = get vertices
+    # Vertex[vertex inst] = weight
+    # Vertex.__iter__() = get ceoonections
+
+    # init
+    graph[st_vtx_id].pred = graph[st_vtx_id]
+    graph[st_vtx_id].distance = 0
+    heap = MinBinaryHeapKV().buildHeap([[_.distance, _.id] for _ in graph])
+
+    while not heap.isEmpty():
+
+        curr_vtx_id = heap.delMin()[1]
+        curr_vtx = graph[curr_vtx_id]
+
+        for next_inst in (_ for _ in curr_vtx if _.id in heap):
+
+            mid = curr_vtx.distance + curr_vtx[next_inst]
+            if mid < next_inst.distance:
+                next_inst.pred = curr_vtx
+                next_inst.distance = mid
+                heap.replace_key_by_val(next_inst.id, mid)
+
+    pprint([f'{_.id} -> {_.distance} -> {st_vtx_id}, pred is {_.pred.id}' for _ in graph])
+```
+
+
+
+
+
 ## 7.9 最小生成树(Minimum Spanning Tree, MST)：Prim算法
 
 > **最小生成树，最小权重生成树：**一个有 n 个结点的连通图的生成树是原图的极小连通子图，且包含原图中的所有 n 个结点，并且有保持图连通的最少的边。
 
 ![](https://i.imgur.com/KRlYKyq.png)
 
-   
+**无控制泛滥法：**借助TTL广播，负载很大
+
+**点对点：**为每个用户都发送一条消息，负载也比较大，比如BD会收到三条消息。
+
+如果能构建一颗**最小生成树**的话，每个节点都只收到一条消息，并转发：A2B，B2D&C，D2E，E2F，F2G
+
+算法思想：
+
+可以用GA。从起始点开始，找最近的顶点；再对最近的顶点找最近的顶点——但是这样可能有遗漏。
+
+所以正确的做法是：**确定一个顶点子集，距离顶点子集最近的点下一步被扩充到子集中。**因此每个顶点被扩充到子集中之前，都要和子集中的每个顶点比较距离。
+
+---
+
+初始值：
+
+1. 所有顶点的`pred`为空，`dist`为一个很大的值，类似于无穷大。
+2. 起始点的`dist`置0；
+3. 构建一个堆`[vertex.dist, vertex.id]`。
+
+**在堆不为空的情况下，循环：**
+
+1. `pop`一个最小顶点作为`curr`；
+2. 对于和`curr`相连，并且在堆中的节点`next`，检查（内循环）：
+   1. 新的距离为`curr`和`next`的距离，加上`curr`的距离；
+   2. 如果新的距离比`next`本身的要小，需要更新`dist=new`，`pred=curr`，`heap[dist]`。
+
+---
+
+每一个堆中顶点在离开堆之前，都和堆外的每个元素比较过距离。
+
+``` python
+def Prim(graph, st_vtx_id):
+
+    # init
+    graph.getVertex(st_vtx_id).distance = 0
+    graph.getVertex(st_vtx_id).pred = graph.getVertex(st_vtx_id)
+    heap = MinBinaryHeapKV().buildHeap([[_.distance, _.id] for _ in graph])
+
+    while not heap.isEmpty():
+        [curr_dist, curr_id] = heap.delMin()
+        
+        # in heap, and connected to heap
+        for next_inst in (_ for _ in graph.getVertex(curr_id).getConnections() if _.id in heap):
+            new_dist = graph.getVertex(curr_id).getWeight(next_inst) + curr_dist
+            if new_dist < next_inst.distance:
+                next_inst.distance = new_dist
+                next_inst.pred = graph.getVertex(curr_id)
+                heap.replace_key_by_val(next_inst.id, new_dist)
+
+    pprint([f'{_.id} -> {_.distance} -> {st_vtx_id}, pred is {_.pred.id}' for _ in graph])
+```
 
 
 
+## 7.10 Outro
 
+对于解决下列问题，图非常有用：
+
+1. 利用宽度优先搜索找到无权重的最短路径。
+2. 利用 Dijkstra 算法求解带权重的最短路径。
+3. 利用深度优先搜索来探索图。
+4. 利用 Kosaraju算法 或 Tarjan算法 求强连通单元来简化图。
+5. 利用拓扑排序为任务排序。
+6. 利用 Prim算法 生成最小生成树并广播消息。
 
 
 
