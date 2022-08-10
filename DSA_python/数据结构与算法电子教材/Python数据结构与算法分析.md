@@ -1170,26 +1170,74 @@ if stVtx.dfn == stVtx.low:
 
 ### 7.7.3 割点、割边、公共祖先(LCA, Lowest Common Ancestor)：Tarjan算法的其他妙用
 
-> **割点(Cut Verteices, Cut Vertex)：**在一个[无向图](https://baike.baidu.com/item/无向图/1680427)中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的[连通分量](https://baike.baidu.com/item/连通分量/290350)增多，就称这个点集为割点集合。如果去掉一个点以及与它连接的边，该点原来所在的图被分成**两部分（不连通）**，则称该点为割点。
+> **割点(Cut Verteices, Cut Vertex)：**在一个**无向图**中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的连通分量增多，就称这个点集为割点集合。如果去掉一个点以及与它连接的边，该点原来所在的图被分成**两部分（不连通）**，则称该点为割点。
 >
-> **割边(Bridge, Cut Edge)：**如果去掉一条边，该边原来所在的图被分成**两部分（不连通）**，则称该点为割边。
+> **割边(Bridge, Cut Edge)：**在一个**无向图**中，如果去掉一条边，该边原来所在的图被分成**两部分（不连通）**，则称该点为割边。
+
+
+
+
+
+#### 割点
+
+[CSDN上的一个帖子](https://blog.csdn.net/weixin_44179892/article/details/104196977)
+
+基本想法差不多，都是在DFS的基础上增加时间戳和追溯值。
+
+但SCC的low是和下家的low比较，看的是能走通的顶点：
+
+CV的low是和dfn比较，而且只能向下不能向自己的父节点查询——这个判断是影响low更新的，**不要**和根据节点是否被访问过决定是否递归向下搜索的**逻辑混淆**了。
+
+以下图为例，以ABCDEFGH为顺序：当D作为当前节点时，只能根据AE来更新low；但是D只能向E递归——**这是两个不同的逻辑**。
 
 ![](https://i.imgur.com/6AMO0Pq.png)
 
-1, 割点：
+![](https://i.imgur.com/yxjKM3G.png)
 
-​                 ①该点为根节点时，若子树数量大于一则说明该点为割点（子树数量不等于与该点连接的[边数](https://www.zhihu.com/search?q=边数&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})）。
+上图说明：E最多只能直接访问到B，而如果要访问比B的时间戳更早的顶点A，就必须要通过B来访问。
 
-​                 ②该点不为根节点时，若存在一个儿子节点的low值大于或等于该点的dfn值时（**low[子节点] >= dfn[[父节点](https://www.zhihu.com/search?q=父节点&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})]**），该点为割点（即子节点，无法通过回边，到达某一部分节点（这些节点的dfn值小于父亲节点））。
+假设存在一条通路，从E直达A，那么E的low值就是1，说明E可以不通过B直接走到A。
+
+所以**判断割点的条件是：**
+
+1. 对于非根节点：如果子节点的low >= 非根节点的 dfn，说明该节点是割点；
+2. 对于根节点：如果在**树上**有超过1条的分支，说明去除这个根节点，就能让分支之间互不连通。
+
+``` python
+cnt = 0  # 统计每个顶点在生成树上有几个实际的子节点
+for next_vtx in curr_vtx:
+
+    if not next_vtx.accessed:
+        next_vtx.pred = curr_vtx
+        cnt += 1
+        _cutVtxTarjan(graph, next_vtx)  # 只有下家未被访问过，才需要递归深入
+        curr_vtx.low = min(curr_vtx.low, next_vtx.low)  # 下家的值会递归向上传递
+
+    elif next_vtx != curr_vtx.pred:  # 对于最下的下家，要么没有子节点，要么就是已访问的顶点
+        # 没有什么下家了，只看相连节点的dfn
+        curr_vtx.low = min(curr_vtx.low, next_vtx.dfn)  
+
+    else:  # 相连的父节点，没什么可操作的
+        pass
+
+    if curr_vtx.dfn <= next_vtx.low and curr_vtx not in graph.forest:
+        graph.cut_vertices.add(curr_vtx)
+
+if curr_vtx in graph.forest and cnt >= 2:
+    graph.cut_vertices.add(curr_vtx)
+```
+
+
+
+#### 割边
+
+
 
 ​    2, 割边：对于任意有边连接的点u，v ，若**low[u] > dfn[v]**，则说明边u-v为一条割边。
 
 
 
-作者：windand
-链接：https://zhuanlan.zhihu.com/p/42281156
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 
 

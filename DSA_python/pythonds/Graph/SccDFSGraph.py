@@ -57,10 +57,10 @@ class SccDFSGraph(object):
         root = None
         for _ in tmp:
             if _.low == _.dfn:
-                graph.roots[_] = []
+                graph.forest[_] = []
                 root = _
             else:
-                graph.roots[root].append(_)
+                graph.forest[root].append(_)
 
     def _dfsTarjan(self, graph, stVtx: Vertex):
         graph.time += 1
@@ -114,14 +114,14 @@ class SccDFSGraph(object):
                 if tmpVtx != stVtx:
                     tmpLst.append(tmpVtx)
                 else:
-                    graph.roots[stVtx] = tmpLst
+                    graph.forest[stVtx] = tmpLst
                     break
         else:
             pass
 
     @staticmethod
     def print_forest(graph):
-        for root, verticesList in graph.roots.items():
+        for root, verticesList in graph.forest.items():
             print(f'---SCC: {root.id}---')
             for vtx in verticesList:
                 print(f'        {vtx.id}')
