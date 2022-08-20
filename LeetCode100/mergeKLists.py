@@ -1,29 +1,26 @@
 from DSA_python.pythonds.basic.Unorderlist import Unorderlist as Lst
+from DSA_python.pythonds.basic.Unorderlist import Node as Node
 
-def main_solve(list_set):
-    input_set = [_.head for _ in list_set]
-    map = {_: 0 for _ in input_set}
-    print(map)
-    print(type(map))
+
+def main_solve(head_set):
+    res_head_dump = Node()
+    res_head_dump.data = 0
+    res_head_dump.next = None
+    res_curr = res_head_dump
+    cnt = 0
+
     while True:
-
-
-
-
-
+        if
 
 
 
 if __name__ == '__main__':
-    lst1 = Lst().build([1, 4, 5])
-    lst2 = Lst().build([1, 3, 4])
-    lst3 = Lst().build([2, 6])
+    lst1 = Lst().build([1, 4, 7])
+    lst2 = Lst().build([2, 3, 5])
+    lst3 = Lst().build([0, 6])
 
     lst_set = [lst1, lst2, lst3]
-    for i in lst_set:
-        print(i)
+    for _ in lst_set:
+        print(_)
 
-
-
-    print(lst1.head.data)
-    main_solve(lst_set)
+    main_solve([_.head for _ in lst_set])
