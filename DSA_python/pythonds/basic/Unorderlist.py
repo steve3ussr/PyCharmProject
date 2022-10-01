@@ -142,6 +142,11 @@ class Unorderlist(object):
     def __repr__(self):
         print(self.__str__())
 
+    def build(self, alist):
+        for i in range(len(alist)-1, -1, -1):
+            self.add(alist[i])
+        return self
+
 
 if __name__ == '__main__':
     mylist = Unorderlist()

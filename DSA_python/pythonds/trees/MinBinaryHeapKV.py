@@ -104,6 +104,7 @@ class MinBinaryHeapKV(object):
         while i > 0:
             self.switchDown(i)
             i -= 1
+        return self
 
     def search_key(self, key):
         for i, kv_set in enumerate(self.heap[1:]):

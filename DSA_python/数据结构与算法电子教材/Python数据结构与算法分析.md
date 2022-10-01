@@ -319,7 +319,7 @@ $$
 
 希尔排序也称“递减增量排序”，它对插入排序做了改进，将列表分成数个子列表，并对每
 一个子列表应用插入排序。如何切分列表是希尔排序的关键——并不是连续切分，而是使用增量
-i（有时称作步长）选取所有间隔为i 的元素组成子列表。
+i（有时称作步长）选取所有间隔为 i 的元素组成子列表。
 
 > 其中一个通项公式，可根据数据规模计算各项步长。
 
@@ -1096,7 +1096,15 @@ class DFSGraph(Graph):
 
 ![](https://i.imgur.com/4z33n0g.png)
 
-![](https://i.imgur.com/7N1klUZ.png)![](https://i.imgur.com/8y34qW7.png)![](https://i.imgur.com/GiRFa5e.png)![](https://i.imgur.com/2OyvgKV.png)![](https://i.imgur.com/AldYHOn.png)
+![](https://i.imgur.com/7N1klUZ.png)
+
+![](https://i.imgur.com/8y34qW7.png)
+
+![](https://i.imgur.com/GiRFa5e.png)
+
+![](https://i.imgur.com/2OyvgKV.png)
+
+![](https://i.imgur.com/AldYHOn.png)
 
 ``` python
 def dfsTarjan(self, graph):
@@ -1162,26 +1170,74 @@ if stVtx.dfn == stVtx.low:
 
 ### 7.7.3 割点、割边、公共祖先(LCA, Lowest Common Ancestor)：Tarjan算法的其他妙用
 
-> **割点(Cut Verteices, Cut Vertex)：**在一个[无向图](https://baike.baidu.com/item/无向图/1680427)中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的[连通分量](https://baike.baidu.com/item/连通分量/290350)增多，就称这个点集为割点集合。如果去掉一个点以及与它连接的边，该点原来所在的图被分成**两部分（不连通）**，则称该点为割点。
+> **割点(Cut Verteices, Cut Vertex)：**在一个**无向图**中，如果有一个顶点集合，删除这个顶点集合以及这个集合中所有顶点相关联的边以后，图的连通分量增多，就称这个点集为割点集合。如果去掉一个点以及与它连接的边，该点原来所在的图被分成**两部分（不连通）**，则称该点为割点。
 >
-> **割边(Bridge, Cut Edge)：**如果去掉一条边，该边原来所在的图被分成**两部分（不连通）**，则称该点为割边。
+> **割边(Bridge, Cut Edge)：**在一个**无向图**中，如果去掉一条边，该边原来所在的图被分成**两部分（不连通）**，则称该点为割边。
+
+
+
+
+
+#### 割点
+
+[CSDN上的一个帖子](https://blog.csdn.net/weixin_44179892/article/details/104196977)
+
+基本想法差不多，都是在DFS的基础上增加时间戳和追溯值。
+
+但SCC的low是和下家的low比较，看的是能走通的顶点：
+
+CV的low是和dfn比较，而且只能向下不能向自己的父节点查询——这个判断是影响low更新的，**不要**和根据节点是否被访问过决定是否递归向下搜索的**逻辑混淆**了。
+
+以下图为例，以ABCDEFGH为顺序：当D作为当前节点时，只能根据AE来更新low；但是D只能向E递归——**这是两个不同的逻辑**。
 
 ![](https://i.imgur.com/6AMO0Pq.png)
 
-1, 割点：
+![](https://i.imgur.com/yxjKM3G.png)
 
-​                 ①该点为根节点时，若子树数量大于一则说明该点为割点（子树数量不等于与该点连接的[边数](https://www.zhihu.com/search?q=边数&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})）。
+上图说明：E最多只能直接访问到B，而如果要访问比B的时间戳更早的顶点A，就必须要通过B来访问。
 
-​                 ②该点不为根节点时，若存在一个儿子节点的low值大于或等于该点的dfn值时（**low[子节点] >= dfn[[父节点](https://www.zhihu.com/search?q=父节点&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"42281156"})]**），该点为割点（即子节点，无法通过回边，到达某一部分节点（这些节点的dfn值小于父亲节点））。
+假设存在一条通路，从E直达A，那么E的low值就是1，说明E可以不通过B直接走到A。
+
+所以**判断割点的条件是：**
+
+1. 对于非根节点：如果子节点的low >= 非根节点的 dfn，说明该节点是割点；
+2. 对于根节点：如果在**树上**有超过1条的分支，说明去除这个根节点，就能让分支之间互不连通。
+
+``` python
+cnt = 0  # 统计每个顶点在生成树上有几个实际的子节点
+for next_vtx in curr_vtx:
+
+    if not next_vtx.accessed:
+        next_vtx.pred = curr_vtx
+        cnt += 1
+        _cutVtxTarjan(graph, next_vtx)  # 只有下家未被访问过，才需要递归深入
+        curr_vtx.low = min(curr_vtx.low, next_vtx.low)  # 下家的值会递归向上传递
+
+    elif next_vtx != curr_vtx.pred:  # 对于最下的下家，要么没有子节点，要么就是已访问的顶点
+        # 没有什么下家了，只看相连节点的dfn
+        curr_vtx.low = min(curr_vtx.low, next_vtx.dfn)  
+
+    else:  # 相连的父节点，没什么可操作的
+        pass
+
+    if curr_vtx.dfn <= next_vtx.low and curr_vtx not in graph.forest:
+        graph.cut_vertices.add(curr_vtx)
+
+if curr_vtx in graph.forest and cnt >= 2:
+    graph.cut_vertices.add(curr_vtx)
+```
+
+
+
+#### 割边
+
+
 
 ​    2, 割边：对于任意有边连接的点u，v ，若**low[u] > dfn[v]**，则说明边u-v为一条割边。
 
 
 
-作者：windand
-链接：https://zhuanlan.zhihu.com/p/42281156
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 
 
@@ -1217,17 +1273,110 @@ $$
 
 每次循环只更新和当前节点（最近一次确定最短路径的节点）之间相连的节点。
 
+``` python
+def Dijkstra(graph, st_vtx_id):
+    
+    # Graph[id] = Vertex inst
+    # Graph.__iter__() = get vertices
+    # Vertex[vertex inst] = weight
+    # Vertex.__iter__() = get ceoonections
+
+    # init
+    graph[st_vtx_id].pred = graph[st_vtx_id]
+    graph[st_vtx_id].distance = 0
+    heap = MinBinaryHeapKV().buildHeap([[_.distance, _.id] for _ in graph])
+
+    while not heap.isEmpty():
+
+        curr_vtx_id = heap.delMin()[1]
+        curr_vtx = graph[curr_vtx_id]
+
+        for next_inst in (_ for _ in curr_vtx if _.id in heap):
+
+            mid = curr_vtx.distance + curr_vtx[next_inst]
+            if mid < next_inst.distance:
+                next_inst.pred = curr_vtx
+                next_inst.distance = mid
+                heap.replace_key_by_val(next_inst.id, mid)
+
+    pprint([f'{_.id} -> {_.distance} -> {st_vtx_id}, pred is {_.pred.id}' for _ in graph])
+```
+
+
+
+
+
 ## 7.9 最小生成树(Minimum Spanning Tree, MST)：Prim算法
 
 > **最小生成树，最小权重生成树：**一个有 n 个结点的连通图的生成树是原图的极小连通子图，且包含原图中的所有 n 个结点，并且有保持图连通的最少的边。
 
 ![](https://i.imgur.com/KRlYKyq.png)
 
-   
+**无控制泛滥法：**借助TTL广播，负载很大
+
+**点对点：**为每个用户都发送一条消息，负载也比较大，比如BD会收到三条消息。
+
+如果能构建一颗**最小生成树**的话，每个节点都只收到一条消息，并转发：A2B，B2D&C，D2E，E2F，F2G
+
+算法思想：
+
+可以用GA。从起始点开始，找最近的顶点；再对最近的顶点找最近的顶点——但是这样可能有遗漏。
+
+所以正确的做法是：**确定一个顶点子集，距离顶点子集最近的点下一步被扩充到子集中。**因此每个顶点被扩充到子集中之前，都要和子集中的每个顶点比较距离。
+
+---
+
+初始值：
+
+1. 所有顶点的`pred`为空，`dist`为一个很大的值，类似于无穷大。
+2. 起始点的`dist`置0；
+3. 构建一个堆`[vertex.dist, vertex.id]`。
+
+**在堆不为空的情况下，循环：**
+
+1. `pop`一个最小顶点作为`curr`；
+2. 对于和`curr`相连，并且在堆中的节点`next`，检查（内循环）：
+   1. 新的距离为`curr`和`next`的距离，加上`curr`的距离；
+   2. 如果新的距离比`next`本身的要小，需要更新`dist=new`，`pred=curr`，`heap[dist]`。
+
+---
+
+每一个堆中顶点在离开堆之前，都和堆外的每个元素比较过距离。
+
+``` python
+def Prim(graph, st_vtx_id):
+
+    # init
+    graph.getVertex(st_vtx_id).distance = 0
+    graph.getVertex(st_vtx_id).pred = graph.getVertex(st_vtx_id)
+    heap = MinBinaryHeapKV().buildHeap([[_.distance, _.id] for _ in graph])
+
+    while not heap.isEmpty():
+        [curr_dist, curr_id] = heap.delMin()
+        
+        # in heap, and connected to heap
+        for next_inst in (_ for _ in graph.getVertex(curr_id).getConnections() if _.id in heap):
+            new_dist = graph.getVertex(curr_id).getWeight(next_inst) + curr_dist
+            if new_dist < next_inst.distance:
+                next_inst.distance = new_dist
+                next_inst.pred = graph.getVertex(curr_id)
+                heap.replace_key_by_val(next_inst.id, new_dist)
+
+    pprint([f'{_.id} -> {_.distance} -> {st_vtx_id}, pred is {_.pred.id}' for _ in graph])
+```
 
 
 
+## 7.10 Outro
 
+对于解决下列问题，图非常有用：
+
+1. 利用宽度优先搜索找到无权重的最短路径。
+2. 利用 Dijkstra 算法求解带权重的最短路径。
+3. 利用深度优先搜索来探索图。
+4. 利用 Kosaraju算法 或 Tarjan算法 求强连通单元来简化图。
+5. 利用拓扑排序为任务排序。
+6. 利用 Prim算法 生成最小生成树并广播消息。
 
 
 

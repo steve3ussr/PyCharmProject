@@ -6,14 +6,15 @@ class DFSGraph(Graph):
     def __init__(self):
         super().__init__()
         self.time = 0
-        self.roots = {}
+        self.forest = {}
         self._tmp_root = None
+        self.cut_vertices = set()
 
     def dfs(self):
         for vtx in self:
             if not vtx.accessed:
                 self._tmp_root = vtx
-                self.roots[vtx] = []
+                self.forest[vtx] = []
                 self.dfsVisit(vtx)
 
     def dfsVisit(self, stVtx: Vertex):
@@ -26,7 +27,7 @@ class DFSGraph(Graph):
                 continue
             else:
 
-                self.roots[self._tmp_root].append(nextVtx)
+                self.forest[self._tmp_root].append(nextVtx)
                 nextVtx.pred = stVtx
                 self.dfsVisit(nextVtx)
         self.time += 1
