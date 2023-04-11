@@ -2,6 +2,14 @@
 
 > LeetCode笔记：id号2000-3000的题目
 
+## [1017. 负二进制转换](https://leetcode.cn/problems/convert-to-base-2/)
+
+其实没有太多技巧，就是不断除 -2 ......我总是想太多。
+
+商其实无所谓，但余数必须保证 0 或 1，因此要调整商。
+
+
+
 ## [1019. 链表中的下一个更大节点](https://leetcode.cn/problems/next-greater-node-in-linked-list/)
 
 > 经典**单调栈**题目：构建一个单调的栈

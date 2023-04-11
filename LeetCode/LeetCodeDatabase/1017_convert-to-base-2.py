@@ -1,40 +1,23 @@
 class Solution:
     def baseNeg2(self, n: int) -> str:
-        bin_pos = bin(n)[2:]
-        print(bin_pos)
+        res = []
+        while not 0 <= n <= 1:
 
-        bin_pos_odd = []
-        bin_pos_even = []
-        for i, v in enumerate(bin_pos):
-            if (len(bin_pos) - i) % 2 == 1:
-                bin_pos_odd.append(v)
-                bin_pos_even.append('0')
-            else:
-                bin_pos_odd.append('0')
-                bin_pos_even.append(v)
+            a = n // (-2)
+            b = n % (-2)
 
-        print(f"{bin_pos} --> {bin_pos_odd} + {bin_pos_even}")
+            if b == -1:
+                b = 1
+                a += 1
 
-        bin_pos_even.reverse()
-        for i in range(1, len(bin_pos_even), 2):
-            if bin_pos_even[i] == '1':
-                if i < len(bin_pos_even) - 1:
-                    bin_pos_even[i + 1] = '1'
-                else:
-                    bin_pos_even.append('1')
-        bin_pos_even.reverse()
+            res.insert(0, str(b))
+            n = a
 
-        print(f"{bin_pos} --> {bin_pos_odd} + {bin_pos_even}")
-        dec_pos_odd = int("".join(bin_pos_odd), 2)
-        dec_pos_even = int("".join(bin_pos_even), 2)
-        res = bin(dec_pos_odd + dec_pos_even)[2:]
-        print(f"{bin_pos} --> {res}")
-        if not len(res) % 2:
-            res = '1' + res
+        res.insert(0, str(n))
 
-        print(res)
-        return res
+        return "".join(res)
 
 
 if __name__ == '__main__':
-    Solution().baseNeg2(14)
+    res = Solution().baseNeg2(14)
+    print(res)
