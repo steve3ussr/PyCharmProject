@@ -61,3 +61,36 @@ stack.push()
 
 
 
+
+
+## [1147. 段式回文](https://leetcode.cn/problems/longest-chunked-palindrome-decomposition/)
+
+![](https://i.imgur.com/UrWfAaP.png)
+
+可以用双指针，但是也可以不用——不用双指针就是写起来方便一些。
+
+```python
+class Solution:
+    def longestDecomposition(self, text: str) -> int:
+        res = 1  # 初始值
+
+        while True:
+
+            if len(text) <= 1:  # 退出条件
+                break
+            
+            match = 0  # 是否在首尾匹配到有回文字符串
+            for i in range(len(text) // 2):  # 左指针不超过中间
+
+                if text[i] == text[-1] and text[:i + 1] == text[-i - 1:]:  # 匹配到了
+                    match = 1
+                    text = text[i + 1:-i - 1]
+                    res += 2 if len(text) else 1
+
+                    break
+
+            if not match:
+                break
+
+        return res
+```
