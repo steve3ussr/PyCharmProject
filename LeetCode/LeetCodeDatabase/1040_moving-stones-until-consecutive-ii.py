@@ -13,6 +13,8 @@ class Solution:
 
 
 if __name__ == '__main__':
+    # TODO:
+    #  1. lookup solve
     data = [1, 5, 2, 9]
     res = Solution().numMovesStonesII(data)
     print(res)

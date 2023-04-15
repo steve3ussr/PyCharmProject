@@ -57,7 +57,15 @@ stack.push()
   - 如果朝北：越走越远；
   - 其他方向：经过二次/四次一定回到起始方向
 
+## [1042. 不邻接植花](https://leetcode.cn/problems/flower-planting-with-no-adjacent/)
 
+这是一个图的题，但是没那么难。
+
+![](https://i.imgur.com/ZB2lZcU.png)
+
+1. 建立顶点之间的连接，没时间造轮子，直接用 adjacent graph;
+2. 遍历每个顶点，在每个顶点里再遍历相邻顶点的颜色;
+3. 去掉重复的颜色，在剩下的颜色里选一个，给当前顶点上色。
 
 
 
