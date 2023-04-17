@@ -48,6 +48,61 @@ stack.push()
 
 
 
+## [1023. 驼峰式匹配](https://leetcode.cn/problems/camelcase-matching/)
+
+![](https://i.imgur.com/YTLaion.png)
+
+我选择对于`pat`的每一个作为主循环，逻辑还好写，但是代码比较长；
+
+答案是用`query`做主循环。
+
+
+
+## [1039. 多边形三角剖分的最低得分](https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/)
+
+![](https://i.imgur.com/gUYtE5Q.png)
+
+```python
+class Solution:
+    def minScoreTriangulation(self, values: List[int]) -> int:
+
+        n = len(values)
+        dp = [[0]*n for _ in range(n)]
+
+        for i in range(n-3, -1, -1):
+            for j in range(i+2, n):
+                res = inf
+                for k in range(i+1, j):
+                    res = min(res, dp[i][k] + dp[k][j] + values[i]*values[j]*values[k])
+                dp[i][j] = res
+
+        return dp[0][n-1]
+```
+
+```python
+class Solution:
+    def minScoreTriangulation(self, values: List[int]) -> int:
+
+        @cache
+        def dfs(i, j):
+            if j - 1 - i == 0:
+                return 0
+            min_value = inf
+
+            for k in range(i + 1, j):
+                min_value = min(min_value, dfs(i, k) + dfs(k, j) + values[i] * values[j] * values[k])
+            return min_value
+
+
+        return dfs(0, len(values)-1)
+```
+
+
+
+
+
+
+
 ## [1041. 困于环中的机器人](https://leetcode.cn/problems/robot-bounded-in-circle/)
 
 代码很简单，关键是思考**总结果**：
