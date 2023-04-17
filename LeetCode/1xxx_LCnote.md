@@ -58,26 +58,27 @@ stack.push()
 
 
 
-## [1039. 多边形三角剖分的最低得分](https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/)
+## [1039. #DP #DFS #递归 #记忆化搜索 多边形三角剖分的最低得分](https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/)
 
-![](https://i.imgur.com/gUYtE5Q.png)
+![](https://i.imgur.com/rUYKDBm.png)
 
-```python
-class Solution:
-    def minScoreTriangulation(self, values: List[int]) -> int:
+> 学习教程：[区间 DP：最长回文子序列 最优三角剖分【基础算法精讲 22】](https://www.bilibili.com/video/BV1Gs4y1E7EU)
+>
+> 主要在于这个思想：不要想着怎么划分三角形，而是要先想到**分而治之**，用递归，再把递归改成动态规划。如下图所示：
+>
+> ![](https://i.imgur.com/nQAtjSN.png)
 
-        n = len(values)
-        dp = [[0]*n for _ in range(n)]
+### 递归
 
-        for i in range(n-3, -1, -1):
-            for j in range(i+2, n):
-                res = inf
-                for k in range(i+1, j):
-                    res = min(res, dp[i][k] + dp[k][j] + values[i]*values[j]*values[k])
-                dp[i][j] = res
+按照上图：
 
-        return dp[0][n-1]
-```
+1. 定义一个递归函数`dfs(i, j)`，含义是以 `i-j` 下标为一条边的多边形，多边形的其他顶点在 i 顺时针 到 j 中；
+2. 定义顺时针为方向；
+3. 这个函数中枚举夹在中间的 k ，`dfs(i,j) = dfs(i,k) + dfs(k,j) + v[i] * v[j] * v[k]`
+4. 对于上一步中的循环，取其中最小值
+5. 递归
+6. 递归退出条件：题中说了数据长度至少为 3，也就是退出条件可以定义为两个参数相邻；
+7. 递归返回的值：`dfs(0, len(values)-1)`
 
 ```python
 class Solution:
@@ -96,6 +97,42 @@ class Solution:
 
         return dfs(0, len(values)-1)
 ```
+
+> 在这个过程中，会有很多重复求解的函数，所以加入`@cache`可以实现记忆化搜索，加快速度。
+
+
+
+### 动态规划
+
+**根据递归，改成动态规划。**
+
+1. `dp[i][j] = dfs(i,j)`，含义是一样的
+2. DP 递推公式：`dp[i][j] = max(dp[i][k] + dp[k][j] + [i][j][k]), i+1 <= k <= j`
+3. 思考循环方式：
+   1. `[i][j]`的状态由`[i][k]`转移，所以 j 正向循环
+   2. `[i][j]`也由`[k][j]`转移，所以 i 逆向循环
+4. 第一层循环 i 起始条件应该为倒数第三个；第二层循环 j 起始条件应为倒数第一个；第三层循环 k 为 i 和 j 之间的正向循环
+
+
+
+```python
+class Solution:
+    def minScoreTriangulation(self, values: List[int]) -> int:
+
+        n = len(values)
+        dp = [[0]*n for _ in range(n)]
+
+        for i in range(n-3, -1, -1):
+            for j in range(i+2, n):
+                res = inf
+                for k in range(i+1, j):
+                    res = min(res, dp[i][k] + dp[k][j] + values[i]*values[j]*values[k])
+                dp[i][j] = res
+
+        return dp[0][n-1]
+```
+
+
 
 
 
