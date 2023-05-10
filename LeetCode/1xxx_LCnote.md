@@ -2,6 +2,20 @@
 
 > LeetCode笔记：id号2000-3000的题目
 
+
+
+## [1015. 可被 K 整除的最小整数](https://leetcode.cn/problems/smallest-integer-divisible-by-k/)
+
+就是判断余数，从1，11往下。
+
+- 判断余数：可以只判断（前一个余数*10+1）的余数
+- 只用判断k个，因为只有k种可能的余数：
+  - 如果碰到0，可以返回
+  - 如果是一个未见过的余数，储存起来
+  - 如果是见过的相同的余数，说明是循环，return -1
+
+
+
 ## [1017. 负二进制转换](https://leetcode.cn/problems/convert-to-base-2/)
 
 其实没有太多技巧，就是不断除 -2 ......我总是想太多。
