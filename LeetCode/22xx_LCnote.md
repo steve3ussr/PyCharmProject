@@ -14,3 +14,8 @@
 
 1. 转换成时间戳
 2. A的时间+B的时间，以及最大时间-最小时间，这两者之间的关系可以评价AB重合时间
+
+## [2437. 有效时间的数目](https://leetcode.cn/problems/number-of-valid-clock-times/)
+
+比较简单。
+
