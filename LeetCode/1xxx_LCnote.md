@@ -14,6 +14,10 @@
   - 如果是一个未见过的余数，储存起来
   - 如果是见过的相同的余数，说明是循环，return -1
 
+## [1016. 子串能表示从 1 到 N 数字的二进制串](https://leetcode.cn/problems/binary-string-with-substrings-representing-1-to-n/)
+
+==TODO==
+
 
 
 ## [1017. 负二进制转换](https://leetcode.cn/problems/convert-to-base-2/)
@@ -70,7 +74,9 @@ stack.push()
 
 答案是用`query`做主循环。
 
+## [1026. 节点与其祖先之间的最大差值](https://leetcode.cn/problems/maximum-difference-between-node-and-ancestor/)
 
+==TODO==
 
 ## [1039. #DP #DFS #递归 #记忆化搜索 多边形三角剖分的最低得分](https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/)
 
@@ -150,9 +156,9 @@ class Solution:
 
 
 
+## [1040. 移动石子直到连续 II](https://leetcode.cn/problems/moving-stones-until-consecutive-ii/)
 
-
-
+==TODO==
 
 ## [1041. 困于环中的机器人](https://leetcode.cn/problems/robot-bounded-in-circle/)
 
@@ -220,6 +226,12 @@ class Solution:
 
 > 有点难，放弃，懒得想。
 
+## [1054. 距离相等的条形码](https://leetcode.cn/problems/distant-barcodes/)
+
+==TODO==
+
+
+
 
 
 ## [1147. 段式回文](https://leetcode.cn/problems/longest-chunked-palindrome-decomposition/)
@@ -253,3 +265,14 @@ class Solution:
 
         return res
 ```
+
+## [1187. 使数组严格递增](https://leetcode.cn/problems/make-array-strictly-increasing/)
+
+==TODO==
+
+## [1330. 翻转子数组得到最大的数组值](https://leetcode.cn/problems/reverse-subarray-to-maximize-array-value/)
+
+==TODO==
+
+
+
