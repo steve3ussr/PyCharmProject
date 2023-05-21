@@ -234,7 +234,116 @@ class Solution:
 
 ## [1072. 按列翻转得到最大值等行数](https://leetcode.cn/problems/flip-columns-for-maximum-number-of-equal-rows/)
 
-==TODO==
+> 可能是一个智商测试题。
+
+如果若干个行，经过列反转后一样，则可能有两种情况：
+
+
+
+```
+1 1 1 1       1 1 1 1
+1 1 1 1  -->  0 0 0 0  -->  这些行之间只有两种，是相反的
+0 0 0 0       0 0 0 0 
+
+1 0 1 1       1 1 1 1
+1 0 1 1  -->  1 1 1 
+0 1 0 0 
+
+```
+
+
+
+## [1079. 活字印刷](https://leetcode.cn/problems/letter-tile-possibilities/)
+
+### 难点1: 想到这是DP
+
+假如有一个 `AABCC`，要组成长度为5的字符串，该怎么做呢？
+
+一种分治的思想是，先在5个位置上填充2个C，这样问题就变成了剩下的'AAB'如何填充长度为3的序列。
+
+### 难点2：实现DP
+
+函数的输入，告诉了我们有几种元素，每种元素出现的个数。所以可以用Counter统计。
+
+`dp[i][j]`的定义：前`i`种元素，构成长度为`j`的字符串，有多少种可能。而递推公式可以看出，只和`dp[i-1][]`有关。
+
+假设第i种元素有`c`个，并且我们可以选中其中的若干个（使用的定义为k），`dp[i][j] = dp[i-1][j-k] * C^k_j`
+
+```
+0 <= k <= c
+j-k >= 0, k <= j
+0 <= k <= min(c, j)
+```
+
+### 难点3：DP边界和数学基础
+
+大C(combination)函数，`math.comb(n, k)`，代表了无顺序，从n个元素中选择k个元素的可能性。
+
+```
+C(n, 0) = 1, C(0, 0) = 1
+
+C(0, n) = 0
+```
+
+将DP定义为`[1+种类][1+总长度]`的二维数组。初始值全为0，因为在长度不够的情况下就是0；对于`dp[i][0] = 1`，这是数学定义。
+
+### dp写法
+
+``` python
+cnt = Counter(tiles).values()
+max_div = len(cnt)
+max_len = len(tiles)
+
+dp = [[0] * (1+max_len) for _ in range(1+max_div)]
+dp[0][0] = 1
+curr_len = 0
+for i, v in enumerate(cnt, 1):
+    curr_len += v
+    dp[i][0] = 1
+    for j in range(1, curr_len+1):
+        for k in range(min(v, j)+1):
+            dp[i][j] += dp[i-1][j-k] * comb(j, k)
+            
+return sum(dp[-1][1:])
+
+```
+
+### DP空间优化
+
+递推公式里，只和`dp[i-1][j]`有关，因此可以减少一层
+
+``` python
+cnt = Counter(tiles).values()
+max_div = len(cnt)
+max_len = len(tiles)
+
+dp = [0] * (1+max_len)
+
+curr_len = 0
+for v in cnt:
+    curr_len += v
+    dp[0] = 1
+    for j in range(curr_len, 0, -1):
+        for k in range(1, min(v, j)+1):
+            dp[i][j] += dp[i-1][j-k] * comb(j, k)
+            
+return sum(dp[1:])
+
+```
+
+
+
+## [1335. 工作计划的最低难度](https://leetcode.cn/problems/minimum-difficulty-of-a-job-schedule/)
+
+### Recursion
+
+
+
+### DP
+
+
+
+### mono
 
 
 
