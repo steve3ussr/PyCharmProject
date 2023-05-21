@@ -335,13 +335,34 @@ return sum(dp[1:])
 
 ## [1335. 工作计划的最低难度](https://leetcode.cn/problems/minimum-difficulty-of-a-job-schedule/)
 
+- 如果任务数量和天数一样，返回总和
+- 如果天数为 1，返回最大值
+
 ### Recursion
 
+比较容易想，i 天做完 j 个任务，可以转化为 i-1 天做完 j-k 个，再加上这 k 个任务中的最大值。
 
+递归的停止条件是：如果 i == j，就返回这些任务的和。
 
-### DP
+这里应该满足：
 
+- j-k >= i-1, k <= j+1-i
+- k >= 1
 
+在循环 k 的过程中，不断更新这 k 个任务的最大值。
+
+### DP, 2dimension
+
+把递归改成dp，很容易。建议是`dp[day][task]`，因为可以让`dp[0] = max_accumulate`
+
+### DP, 1dimension
+
+注意到 `dp[i][j]`只由`dp[i-1][j-k]`转移而来，所以可以变成`dp[j]`。
+
+- i 正向循环
+- j 逆向循环
+- 每个`dp[j]`从 inf 开始重新计算
+- k 逆向循环
 
 ### mono
 

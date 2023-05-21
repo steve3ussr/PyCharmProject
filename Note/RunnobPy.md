@@ -986,6 +986,21 @@ print(lxf_str2float('123.456'))
 
 **filter返回的也是惰性序列**
 
+## accumulate
+
+`itertools.accumulate`
+
+不同于reduce，返回的是一个 iterable 对象，和传入序列长度相同。例如：
+
+```
+data = [1, 1, 4, 5, 1, 4]
+accumulate(data, operator.add) = [1, 2, 6, 11, 12, 16]
+accumulate(data, max) = [1, 1, 4, 5, 5, 5]
+accumulate(data, lambda a, b: a*b) = [1, 1, 4, 20, 20, 80]
+```
+
+
+
 ## sort
 
 排序，高级的排序。
