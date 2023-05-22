@@ -4,7 +4,7 @@ from math import inf
 
 class Solution:
     def maxSumAfterPartitioning(self, arr: list[int], k: int) -> int:
-        return self.v4_dp_opt(arr, k)
+        return self.v3_dp(arr, k)
 
     def v1_iter_simple(self, arr, k):
         def func(lst):
