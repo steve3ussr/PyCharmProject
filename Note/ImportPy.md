@@ -24,6 +24,19 @@ Counter继承自dict类型，相当于是一种只用来计数的hash table。�
 
 ### deque
 
+> collections.deque 似乎比 queue.Queue 更优秀更快，而且API也更舒服
+
+- `pop(), popleft()`
+- `append(), appendleft()`
+- `count()`似乎和`len()`一样
+- `extend(), extendleft()`，接收一个iterable类型
+- `index()`，用来查找
+- 可以像列表一样使用`__getitem()__`
+- `reverse()`
+- `insert(i)`
+- `clear()`清空
+- `remove(v)`删除第一个值
+
 
 
 

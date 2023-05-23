@@ -331,6 +331,37 @@ return sum(dp[1:])
 
 ```
 
+## [1090. 受标签影响的最大值](https://leetcode.cn/problems/largest-values-from-labels/)
+
+思想：GA，按照values大小，选择值作为答案。如果选择了某个值，就给label使用次数+1，使用次数达到限制就跳过。
+
+创造一个index list，根据values[i]排序，根据排序后的index，values[index]就是从大到小的顺序，labels[index] 就是对应的tag。
+
+``` python
+class Solution:
+    def largestValsFromLabels(self, values: List[int], labels: List[int], numWanted: int, useLimit: int) -> int:
+        dict_label_counter = {_: 0 for _ in labels}
+        index = list(range(len(values)))
+        index.sort(key=lambda x: -values[x])
+
+        res = 0
+        cnt = 0
+
+        for i in index:
+            if dict_label_counter[labels[i]] < useLimit:
+                cnt += 1
+                dict_label_counter[labels[i]] += 1
+                res += values[i]
+
+            if cnt == numWanted:
+                return res
+        return res
+```
+
+
+
+
+
 
 
 ## [1335. 工作计划的最低难度](https://leetcode.cn/problems/minimum-difficulty-of-a-job-schedule/)
@@ -403,6 +434,12 @@ class Solution:
 ## [1187. 使数组严格递增](https://leetcode.cn/problems/make-array-strictly-increasing/)
 
 ==TODO==
+
+
+
+
+
+
 
 ## [1330. 翻转子数组得到最大的数组值](https://leetcode.cn/problems/reverse-subarray-to-maximize-array-value/)
 
