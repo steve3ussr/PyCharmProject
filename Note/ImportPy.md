@@ -96,3 +96,36 @@ loc根据label，iloc根据index
 
 ### Timer
 
+
+
+
+
+## bisect
+
+二分查找，默认是输入的序列是递增的
+
+### bisect_left
+
+`bisect_left(a: sequence, x)`
+
+返回一个值 i，使得`a[:i] < x <= a[i:]`
+
+在L中查找x，x存在时返回x左侧的位置，x不存在返回应该插入的位置
+
+### bisect_right
+
+`bisect_right(a: sequence, x)`
+
+返回一个值 i，使得`a[:i] <= x < a[i:]`
+
+在L中查找x，x存在时返回x右侧的位置，x不存在返回应该插入的位置
+
+### insert_left
+
+将x插入到列表L中，x存在时插入在左侧
+
+
+
+### insert_right
+
+将x插入到列表L中，x存在时插入在右侧
