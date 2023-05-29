@@ -4,9 +4,7 @@ import psutil
 from threading import Timer
 import time
 from os import system
-
-
-# pyinstaller -F -w -i C:\Users\steve3ussr\Desktop\icons8-update-80.ico --upx-dir=C:\ProgramLocalLow\upx-4.0.2-win64\upx.exe --key sUMdGrYZ3aDssGyp C:\File\Repository\PyCharmProject\SelfDefinedScripts\CtrlClient.py
+from sys import argv
 
 
 class CycleTimer(Timer):
@@ -19,7 +17,6 @@ class CycleTimer(Timer):
 class RemoteCtrlClient:
     # TODO: kill, restart in 10s
     def __init__(self, machine_id):
-        assert isinstance(machine_id, int) and 1 <= machine_id <= 4
         self.machine_id = machine_id
 
         self.timer_request = CycleTimer(2, self._exec)
@@ -158,5 +155,5 @@ class RemoteCtrlClient:
 
 
 if __name__ == '__main__':
-    client = RemoteCtrlClient(3)
+    client = RemoteCtrlClient(1)
     client.exec()
