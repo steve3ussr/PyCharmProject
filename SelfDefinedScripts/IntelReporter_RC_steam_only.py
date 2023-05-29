@@ -6,7 +6,7 @@ import time
 from os import system
 
 
-# pyinstaller -F -w -i C:\Users\steve3ussr\Desktop\icons8-update-80.ico --upx-dir=C:\ProgramLocalLow\upx-4.0.2-win64\upx.exe --key sUMdGrYZ3aDssGyp C:\File\Repository\PyCharmProject\SelfDefinedScripts\CtrlClient.py
+
 
 
 class CycleTimer(Timer):
@@ -36,7 +36,7 @@ class RemoteCtrlClient:
         self.timer_start_proc = None
         self.interval_start_proc = 10
 
-        self.log_folder = r"C:\Users\Administrator\AppData\Local\AMD_Common\log"
+        self.log_folder = r"C:\_test_log_steam_remote_ctrl"
 
     def _kill_proc(self, name):
         for proc in psutil.process_iter():
@@ -48,9 +48,12 @@ class RemoteCtrlClient:
 
     def _start_proc_aux(self, name):
         try:
-            system(r"start C:\Progra~1\Oray\SunLogin\SunloginClient\SunloginClient.exe")
+            system(name)
         except:
-            pass
+            try:
+                system ("start D:\steam\Steam.exe")
+            except:
+                pass
         self.timer_start_proc = None
 
     def _start_proc(self, name):
@@ -97,24 +100,12 @@ class RemoteCtrlClient:
 
     def _kill_request(self, operation_code):
         if operation_code == 1:
-            self._kill_proc('sunlogin')
-            self.log_kill = f"VALID command: {operation_code}, kill sunlogin"
+            self._kill_proc('steam')
+            self.log_kill = f"VALID command: {operation_code}, kill steam"
 
         elif operation_code == 2:
-            self._kill_proc('starccm')
-            self.log_kill = f"VALID command: {operation_code}, kill starccm"
-
-        elif operation_code == 3:
-            self._kill_proc('filezilla')
-            self.log_kill = f"VALID command: {operation_code}, kill filezilla"
-
-        elif operation_code == 4:
-            self._restart_proc('sunlogin')
-            self.log_kill = f"VALID command: {operation_code}, restart sunlogin"
-
-        elif operation_code == 5:
-            self._kill_proc('explorer')
-            self.log_kill = f"VALID command: {operation_code}, kill explorer"
+            self._restart_proc('steam')
+            self.log_kill = f"VALID command: {operation_code}, restart steam"
 
         else:
             self.log_kill = f"INVALID command: {operation_code}"
@@ -158,5 +149,5 @@ class RemoteCtrlClient:
 
 
 if __name__ == '__main__':
-    client = RemoteCtrlClient(3)
+    client = RemoteCtrlClient(1)
     client.exec()

@@ -1,0 +1,2 @@
+pyinstaller -F -w -i C:\Users\steve3ussr\Desktop\5969036.ico --upx-dir=C:\ProgramLocalLow\upx-4.0.2-win64\upx.exe --key sUMdGrYZ3aD
+ssGyp C:\File\Repository\PyCharmProject\SelfDefinedScripts\CtrlClient.py
