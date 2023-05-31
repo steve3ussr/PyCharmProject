@@ -4,25 +4,19 @@ import psutil
 from threading import Timer
 import time
 from os import system
+from SelfDefinedScripts.common_modules.CycleTimer import CycleTimer
 
 
-
-
-
-class CycleTimer(Timer):
-    def run(self):
-        while not self.finished.is_set():
-            self.finished.wait(self.interval)
-            self.function(*self.args, **self.kwargs)
+# TODO：
+#   1. kill matlab
+#   2.
 
 
 class RemoteCtrlClient:
-    # TODO: kill, restart in 10s
-    def __init__(self, machine_id):
-        assert isinstance(machine_id, int) and 1 <= machine_id <= 4
+    def __init__(self, machine_id, log_dir):
         self.machine_id = machine_id
 
-        self.timer_request = CycleTimer(2, self._exec)
+        self.timer_request = CycleTimer(5, self._exec)
 
         self.instruct = None
         self.log_instruct = None
@@ -35,25 +29,21 @@ class RemoteCtrlClient:
 
         self.timer_start_proc = None
         self.interval_start_proc = 10
-
-        self.log_folder = r"C:\_test_log_steam_remote_ctrl"
+        self.log_folder = log_dir
 
     def _kill_proc(self, name):
         for proc in psutil.process_iter():
-            try:
-                if name.lower() in proc.name().lower():
+            if name.lower() in proc.name().lower():
+                try:
                     proc.kill()
-            except:
-                continue
+                except:
+                    continue
 
     def _start_proc_aux(self, name):
         try:
-            system(name)
+            system(r"start C:\Progra~1\Oray\SunLogin\SunloginClient\SunloginClient.exe")
         except:
-            try:
-                system ("start D:\steam\Steam.exe")
-            except:
-                pass
+            pass
         self.timer_start_proc = None
 
     def _start_proc(self, name):
@@ -100,12 +90,24 @@ class RemoteCtrlClient:
 
     def _kill_request(self, operation_code):
         if operation_code == 1:
-            self._kill_proc('steam')
-            self.log_kill = f"VALID command: {operation_code}, kill steam"
+            self._kill_proc('sunlogin')
+            self.log_kill = f"VALID command: {operation_code}, kill sunlogin"
 
         elif operation_code == 2:
-            self._restart_proc('steam')
-            self.log_kill = f"VALID command: {operation_code}, restart steam"
+            self._kill_proc('starccm')
+            self.log_kill = f"VALID command: {operation_code}, kill starccm"
+
+        elif operation_code == 3:
+            self._kill_proc('filezilla')
+            self.log_kill = f"VALID command: {operation_code}, kill filezilla"
+
+        elif operation_code == 4:
+            self._restart_proc('sunlogin')
+            self.log_kill = f"VALID command: {operation_code}, restart sunlogin"
+
+        elif operation_code == 5:
+            self._kill_proc('explorer')
+            self.log_kill = f"VALID command: {operation_code}, kill explorer"
 
         else:
             self.log_kill = f"INVALID command: {operation_code}"
@@ -115,39 +117,51 @@ class RemoteCtrlClient:
         self.timer_reset_cd = None
 
     def _log(self):
+        def inner_write(log_dir):
+            with open(log_dir, mode='a+') as f:
+                time_hms = time.strftime('%H:%M:%S', time_curr)
+                f.write(f"{time_hms}, "
+                        f"{self.log_instruct}\n")
+
+                if self.log_kill:
+                    f.write(f"          {self.log_kill}\n")
+
         time_curr = time.localtime(time.time())
-        log_dir = f"{self.log_folder}\\IntelReporter_{time.strftime('%Y-%m-%d', time_curr)}.log"
-
-        with open(log_dir, mode='a+') as f:
-            time_hms = time.strftime('%H:%M:%S', time_curr)
-            f.write(f"{time_hms}, "
-                    f"{self.log_instruct}\n")
-
-            if self.log_kill:
-                f.write(f"          {self.log_kill}\n")
+        try:
+            log_dir = f"{self.log_folder}\\{time.strftime('%Y-%m-%d', time_curr)}.log"
+            inner_write(log_dir)
+        except:
+            log_dir = f"C:\\{time.strftime('%Y-%m-%d', time_curr)}.log"
+            inner_write(log_dir)
 
     def _exec(self):
-        res = self._listen()
+        try:
+            res = self._listen()
 
-        if not res:  # no kill action
-            self.log_kill = None
+            if not res:  # no kill action
+                self.log_kill = None
 
-        elif self.status_cool_down:  # kill, but cd
-            self.log_kill = f"kill request received. Cooling down..."
+            elif self.status_cool_down:  # kill, but cd
+                self.log_kill = f"kill request received. Cooling down..."
 
-        else:  # kill, and enter cd
-            self._kill_request(res)
+            else:  # kill, and enter cd
+                self._kill_request(res)
 
-            self.status_cool_down = True
-            self.timer_reset_cd = Timer(self.interval_reset_cd, self._reset_cd)
-            self.timer_reset_cd.start()
+                self.status_cool_down = True
+                self.timer_reset_cd = Timer(self.interval_reset_cd, self._reset_cd)
+                self.timer_reset_cd.start()
 
-        self._log()
+        except:
+            pass
+        # TODO: make log able to receive string arg
+
+        finally:
+            self._log()
 
     def exec(self):
         self.timer_request.start()
 
 
 if __name__ == '__main__':
-    client = RemoteCtrlClient(1)
+    client = RemoteCtrlClient(1, 'dfea')
     client.exec()
