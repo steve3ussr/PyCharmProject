@@ -1,3 +1,15 @@
+## [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+
+
+
+
+## [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+仔细想一想，最后应该return left。
+
+
+
 ## [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
 
 ### 普通思路
@@ -64,3 +76,24 @@ def func(nums: list[int]) -> list[int]:
         return ans
 ```
 
+
+
+## [704. 二分查找](https://leetcode.cn/problems/binary-search/)
+
+用双指针限定范围。确定中间值，然后根据target的位置，选择左指针`mid+1`，或者右指针`mid-1`。
+
+极限情况下，左右指针只差一位。这时候mid=left：
+
+- k=mid=left，返回
+- k < mid，退出循环return -1
+- k > mid，left=right=mid，再循环
+
+> 最极端，left=right=mid:
+>
+> - 相等，那就return
+> - k > mid，left = right+1，应该推出
+> - k < mid，right = left-1，应该推出
+
+可以发现退出循环条件至少是left < right。
+
+left=right，也可以，所以选择left<=right
