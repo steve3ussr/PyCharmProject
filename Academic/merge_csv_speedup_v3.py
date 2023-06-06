@@ -36,57 +36,49 @@ class MergeData:
         self.__coord = None  # 内部用来验证坐标一致性的变量
         self.res = {_: None for _ in self._list_phy_var}  # 数据处理结果
 
-    def _load_csv_fill_res(self, timestep_id) -> None:
-        # pre-check file path valid
-        abspath = f"{self._csv_prefix}{timestep_id}.csv"
-        assert os.path.isfile(abspath), f"ERROR: csv file pre-check failed, {abspath} isn't valid path."
-        print(f"LOADING: {self._csv_prefix}::{id}")
-
-        # pandas.read_csv
-        data_ori = pd.read_csv(abspath).rename(columns=lambda x: re.sub(' ', '_', x))
-        data_ori = data_ori.sort_values(by=self._list_coord,
-                                        ascending=[True, True, True],
-                                        kind='quicksort',
-                                        ignore_index=True)
-
-        # fill coord
-        self.__coord = data_ori.loc[:, self._list_coord]
-
-        # fill res
-        time_phy_curr = (timestep_id - self._ts_init) * self._time_phy_step + self._time_phy_start
-        for phy_var in self._list_phy_var:
-            self.res[phy_var] = data_ori.loc[:, phy_var].to_frame(name=f"{time_phy_curr}")
-
-    def _load_csv_check_coord(self, timestep_id):
+    def _load_csv_check_coord(self, timestep_id, mode=0):
         # pre-check file path valid
         abspath = f"{self._csv_prefix}{timestep_id}.csv"
         assert os.path.isfile(abspath), f"ERROR: csv file pre-check failed, {abspath} isn't valid path."
         print(f"LOADING: {self._csv_prefix}::{timestep_id}")
 
         # pandas.read_csv
-        data_ori = pd.read_csv(abspath).rename(columns=lambda x: re.sub(' ', '_', x))
+        data_ori = pd.read_csv(abspath).rename(columns=lambda x: re.sub(' |:', '_', x))
         data_ori = data_ori.sort_values(by=self._list_coord,
                                         ascending=[True, True, True],
                                         kind='quicksort',
                                         ignore_index=True)
 
-        # check coord
-        try:
-            assert self.__coord.equals(data_ori.loc[:, self._list_coord])
-        except AssertionError:
-            raise AssertionError(f"ERROR: coord unequal from: {self._csv_prefix}::{id}")
+        if mode == 0:
+            try:
+                assert self.__coord.equals(data_ori.loc[:, self._list_coord])
+            except AssertionError:
+                raise AssertionError(f"ERROR: coord unequal from: {self._csv_prefix}::{id}")
 
-        # return res
-        time_phy_curr = (timestep_id - self._ts_init) * self._time_phy_step + self._time_phy_start
-        return [data_ori.loc[:, phy_var].to_frame(name=f"{time_phy_curr}") for phy_var in self._list_phy_var]
+            time_phy_curr = (timestep_id - self._ts_init) * self._time_phy_step + self._time_phy_start
+            return [data_ori.loc[:, phy_var].to_frame(name=f"{time_phy_curr}") for phy_var in self._list_phy_var]
+
+        elif mode == 1:
+            self.__coord = data_ori.loc[:, self._list_coord]
+
+            time_phy_curr = (timestep_id - self._ts_init) * self._time_phy_step + self._time_phy_start
+            for phy_var in self._list_phy_var:
+                self.res[phy_var] = data_ori.loc[:, phy_var].to_frame(name=f"{time_phy_curr}")
+            return
+
+    def _export_phy_var(self, k):
+        _ = polars.from_pandas(self.res[k])
+        _.write_csv(f"{self._dir_root}\\TS_{k}_{self._boundary}_MULTI_POLARS_v2.csv", batch_size=2048)
+        print(f"COMPLETED: {self._boundary}::{k}")
 
     def exec(self, np=8):
-        self._load_csv_fill_res(self._ts_init)
+        self._load_csv_check_coord(self._ts_init, mode=1)
 
-        with Pool(processes=np) as pool:
-            csv_data = pool.map(self._load_csv_check_coord, range(self._ts_init + 1, self._ts_end + 1))
+        with Pool(processes=np) as pool_read:
+            csv_data = pool_read.map(self._load_csv_check_coord, range(self._ts_init + 1, self._ts_end + 1))
 
         for i, phy_var in enumerate(self._list_phy_var):
+            # extract data, export AVG_
             tmp_df = pd.concat([_[i] for _ in csv_data], axis=1)
             self.res[phy_var] = pd.concat([self.res[phy_var], tmp_df], axis=1)
 
@@ -95,9 +87,9 @@ class MergeData:
             _.to_csv(f"{self._dir_root}\\AVG_{phy_var}_{self._boundary}_v2.csv")
 
             self.res[phy_var] = pd.concat([self.__coord, self.res[phy_var]], axis=1)
-            _ = polars.from_pandas(self.res[phy_var])
-            _.write_csv(f"{self._dir_root}\\TS_{phy_var}_{self._boundary}_MULTI_POLARS_v2.csv", batch_size=2048)
-            print(f"COMPLETED: {self._boundary}::{phy_var}")
+
+        with Pool(processes=2) as pool_write:
+            pool_write.map(self._export_phy_var, self._list_phy_var)
 
 
 if __name__ == '__main__':

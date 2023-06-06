@@ -1,4 +1,38 @@
+## [27. 移除元素](https://leetcode.cn/problems/remove-element/)
+
+双指针问题。
+
+![](https://code-thinking.cdn.bcebos.com/gifs/27.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0-%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95.gif)
+
+
+
+
+
+
+
 ## [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+重要的参考文献：[【二分查找【基础算法精讲 04】](https://www.bilibili.com/video/BV1AP41137w7)
+
+```python
+if nums[mid] < target:
+	lo = mid + 1
+elif nums[mid] > target:
+	hi = mid - 1
+```
+
+这个二分查找意味着，有两件事情是不变的：
+
+- `nums[lo-1] < target`
+- `nums[hi+1] > target`
+
+对于这个问题，寻找左边界的时候需要hi尽可能往左移动，所以要[mid]>=target；寻找右边界的时候差不多。
+
+最终情况：lo=mid=hi
+
+一下内容用寻找左边界示范：
+
+
 
 
 
@@ -7,6 +41,12 @@
 ## [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
 
 仔细想一想，最后应该return left。
+
+
+
+## [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+
+老套路，需要找到最大的，小于等于目标值的一个值。
 
 
 
@@ -48,6 +88,12 @@ data = [1,6,7,2,4,5,3]
 - 在res中，找到第一个大于v的下标：
   - 在res下标里就替换
   - 在列表范围外就扩展
+
+
+
+## [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/)
+
+很简单。
 
 
 
