@@ -4,7 +4,9 @@
 
 ![](https://code-thinking.cdn.bcebos.com/gifs/27.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0-%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95.gif)
 
-
+- 如果传统的移除元素，这需要O(n2)
+- 快指针表示当前遍历到原始数组的哪个位置
+- 慢指针表示在**移除元素**后的数组里，快指针所在的元素应该在什么位置。
 
 
 
@@ -49,6 +51,12 @@ elif nums[mid] > target:
 老套路，需要找到最大的，小于等于目标值的一个值。
 
 
+
+## [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
+
+![](https://pic.leetcode-cn.com/36d1ac5d689101cbf9947465e94753c626eab7fcb736ae2175f5d87ebc85fdf0-283_2.gif)
+
+相比之下多了个交换的过程。重点在于理解性质。
 
 ## [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
 
