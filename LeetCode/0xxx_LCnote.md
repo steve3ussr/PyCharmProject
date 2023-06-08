@@ -151,3 +151,34 @@ def func(nums: list[int]) -> list[int]:
 可以发现退出循环条件至少是left < right。
 
 left=right，也可以，所以选择left<=right
+
+## [844. 比较含退格的字符串](https://leetcode.cn/problems/backspace-string-compare/)
+
+可以用stack，但是，不是最好的方法。
+
+**最节省资源的方式：逆序寻找，但代码真的很丑**
+
+
+
+## [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
