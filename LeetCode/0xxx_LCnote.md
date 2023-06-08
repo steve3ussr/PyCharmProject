@@ -52,6 +52,13 @@ elif nums[mid] > target:
 
 
 
+## [209. 长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/)
+
+滑动窗口。
+
+- 当前长度够，就更新长度，把低指针向前移动
+- 当前长度不够，就gao
+
 ## [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
 
 ![](https://pic.leetcode-cn.com/36d1ac5d689101cbf9947465e94753c626eab7fcb736ae2175f5d87ebc85fdf0-283_2.gif)
@@ -162,7 +169,11 @@ left=right，也可以，所以选择left<=right
 
 ## [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
+两周简单情况，不用说。
 
+先找到第一个大于等于0的数字，以此为分界线，一边小于0，另一边大于等于0.
+
+然后向两边分别找。
 
 
 
