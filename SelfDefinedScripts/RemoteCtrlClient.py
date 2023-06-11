@@ -8,7 +8,7 @@ from SelfDefinedScripts.common_modules.CycleTimer import CycleTimer
 
 
 # TODO：
-#   1. kill matlab
+#   1.
 #   2.
 
 
@@ -109,6 +109,10 @@ class RemoteCtrlClient:
             self._kill_proc('explorer')
             self.log_kill = f"VALID command: {operation_code}, kill explorer"
 
+        elif operation_code == 6:
+            self._kill_proc('matlab')
+            self.log_kill = f"VALID command: {operation_code}, kill matlab"
+
         else:
             self.log_kill = f"INVALID command: {operation_code}"
 
@@ -163,5 +167,5 @@ class RemoteCtrlClient:
 
 
 if __name__ == '__main__':
-    client = RemoteCtrlClient(1, 'dfea')
+    client = RemoteCtrlClient(1, r'C:\Users\steve3ussr\Desktop\_tmp_log')
     client.exec()

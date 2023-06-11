@@ -6,8 +6,8 @@ program_root_dir = os.path.abspath(os.path.join(os.getcwd(), '..'))
 upx_dir = 'C:\\ProgramLocalLow\\upx-4.0.2-win64'
 
 data = {
-    1: {'fake_type': 'intel'},
-    2: {'fake_type': 'amd'},
+    1: {'fake_type': 'amd'},
+    2: {'fake_type': 'intel'},
     3: {'fake_type': 'intel'},
     4: {'fake_type': 'intel'},
 }
