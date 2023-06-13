@@ -46,9 +46,74 @@ elif nums[mid] > target:
 
 
 
+## [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+核心是找个例子多想。
+
+另外要保持左闭右开，或者其他原则，不能总变，如图所示：
+
+![](https://code-thinking-1253855093.file.myqcloud.com/pics/20220922102236.png)
+
+
+
 ## [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
 
 老套路，需要找到最大的，小于等于目标值的一个值。
+
+
+
+## [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
+
+有点难。这个题的本质是找一个最短的子序列。通常的套路是：
+
+```python
+lo = 0
+for hi, v_hi in enumerate(data):
+    v_hi 加入窗口
+    while 满足条件：
+    	缩短前指针
+        更新结果
+    
+```
+
+```
+lo = 0
+for hi, v_hi in enumerate(data):
+    v_hi 加入窗口
+    
+    flag = False
+    while 满足条件：
+    	flag = True
+    	缩短前指针
+    	
+    更新结果 if flag
+    
+```
+
+对这道题来说，可以这样做：
+
+- 缩短前指针的条件是：`hashmap[s[lo]]`的数量比要求的多，移除多余的元素。
+- 在循环一开始加入的时候，判断一下新加入的元素是否在需求之内——当前窗口，能cover住多少需求
+- 如果刚好能满足需求，说明这是一个局部最优解，才能更新答案
+
+## [203. 移除链表元素](https://leetcode.cn/problems/remove-linked-list-elements/)
+
+需要两个指针，一个last，一个curr。
+
+但对于第一个元素，没有last，所以可以创建一个fake head ListNode对象，增加一个head。
+
+curr一直遍历：
+
+- curr值不等于目标：curr移动到下一个，last移动到下一个
+- curr值等于目标，需要被移除：last.next指向curr.next，last本身不动；curr移动到下一个
+
+
+
+## [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+增加一个fake head
+
+用三个指针来改变
 
 
 
@@ -164,6 +229,23 @@ left=right，也可以，所以选择left<=right
 可以用stack，但是，不是最好的方法。
 
 **最节省资源的方式：逆序寻找，但代码真的很丑**
+
+## [904. 水果成篮](https://leetcode.cn/problems/fruit-into-baskets/)
+
+本质是寻找一个最长子序列。
+
+``` python
+lo = 0
+for hi, v_hi in enumerate(data):
+    v_hi 加入窗口
+    
+    while 不满足条件：
+    	缩短前指针，直至满足条件
+        
+    更新结果
+```
+
+
 
 
 
