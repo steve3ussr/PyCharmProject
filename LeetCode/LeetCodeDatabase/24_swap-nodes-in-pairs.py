@@ -7,22 +7,12 @@ class Solution:
         if not head or not head.next:
             return head
 
+        head_fake = ListNode(0, head)
+        prev = head_fake
         curr = head
 
+        while curr and curr.next:
+            prev.next, curr.next.next, curr.next = curr.next, curr, curr.next.next
+            prev, curr = curr, curr.next
 
-
-
-
-if __name__ == '__main__':
-    data = [1,2,3,4,5]
-    _ = None
-    for i in range(len(data)-1, -1, -1):
-        _ = ListNode(data[i], _)
-    head = _
-
-    res = Solution().swapPairs(head)
-    _ = res
-    while _:
-        print(_.val)
-        _ = _.next
-
+        return head_fake.next
