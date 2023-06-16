@@ -1,3 +1,17 @@
+## [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+
+让快指针先走n步，再两个一起走。
+
+这样的话，快指针停下的时候，慢指针指向prev。
+
+
+
+## [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+没什么难的，prev, curr, curr.next之间交换的问题。
+
+
+
 ## [27. 移除元素](https://leetcode.cn/problems/remove-element/)
 
 双指针问题。
@@ -95,6 +109,19 @@ for hi, v_hi in enumerate(data):
 - 缩短前指针的条件是：`hashmap[s[lo]]`的数量比要求的多，移除多余的元素。
 - 在循环一开始加入的时候，判断一下新加入的元素是否在需求之内——当前窗口，能cover住多少需求
 - 如果刚好能满足需求，说明这是一个局部最优解，才能更新答案
+
+## [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+参考文献：[代码随想录——环形列表II ](https://www.programmercarl.com/0142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.html#%E6%80%9D%E8%B7%AF)
+
+第一种想法，用空间换时间，通过记录所有访问过的节点，找到相交的点。
+
+第二种想法，相对复杂一些：
+
+- 快慢指针，相遇的节点记录一下；
+- 相遇的节点和头节点同时向后遍历，相遇的点就是相交点。
+- 具体过程和数学证明见参考文献。
+- 虽然空间复杂度为O(1)，时间复杂度也一样，但是可能花费时间要长一些。
 
 ## [203. 移除链表元素](https://leetcode.cn/problems/remove-linked-list-elements/)
 
@@ -223,6 +250,16 @@ def func(nums: list[int]) -> list[int]:
 可以发现退出循环条件至少是left < right。
 
 left=right，也可以，所以选择left<=right
+
+## [707. 设计链表](https://leetcode.cn/problems/design-linked-list/)
+
+最快的方式肯定还是DuLNode，毋庸置疑。
+
+但如果用平凡的实现，可能要考虑的情况比较多；最好的做法是定义dumm head and tail，这样思考特殊情况不用太多。
+
+另外这里很多api都涉及一个问题：is index valid?所以可以把这个单独成一个方法`self.-get-node`，valid则返回node，否则None。
+
+
 
 ## [844. 比较含退格的字符串](https://leetcode.cn/problems/backspace-string-compare/)
 
