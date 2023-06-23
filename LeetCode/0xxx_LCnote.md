@@ -43,6 +43,132 @@
 
 
 
+## [28. 找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/)
+
+可用的解法：
+
+1. 暴力解法，O(m x n)
+2. import re，你就说开发效率高不高吧
+3. 典中典之KMP，O(m+n)
+4. 非典中典之sunny == TODO ==
+
+### KMP
+
+> 参考文献：
+>
+> 
+
+#### 思路
+
+传统的暴力解法，如果target和pattern匹配不上，那target的指针就向后移动一位。这个过程中会损失信息，比如下例：
+
+``` 
+a a b a a  b  a a f
+a a b a a *f*
+```
+
+如果匹配到b-f后，target就从index 1再开始，是低效的，因为两个字符串实际上都匹配过aab——所以可以target指向b，pattern指向b后面的a，继续匹配。
+
+为了达成这个，就需要看一看pattern中有多少自相重复的部分。
+
+定义前缀：`a, aa, aab, aaba, aabaa`，是不包含最后一个字符的其他序列
+
+定义后缀：`f, af, aaf, baaf, abaaf`，就这个意思。
+
+定义前缀表`next`：`next[x]`代表从`pattern[0]`到`pattern[x-1]`的序列，公共子序列的长度。比如`next[5]=2`。
+
+```
+a a b a a f
+0 1 0 1 2 0
+```
+
+需要这个东西是因为，假如在 f 发现不匹配，就看 f 前面的序列中最长的公共前后缀，然后跳转位置。f 前面最长的是a 对应的 2——2是长度（aa），也是跳转的下标。
+
+#### 前缀表求解
+
+思路是这样的：如果已知`next[0] .. next[x-1]`，如何求解`next[x]`?
+
+如果`list[x] == list[next[x-1]]`，说明形成了一个公共前后缀，数值+1，例如：
+
+```
+a a b a a b
+0 1 0 1 2 ?
+
+list[5] == list[next[5-1]] == list[2], ? = list[2]+1 = 3
+```
+
+如果不相等呢？
+
+我们还是需要减少重复匹配。
+
+``` 
+a a f a c a a f a f
+0 1 0 1 0 1 2 3 4 ?   f != c
+
+(aafa) c (aafa) f
+  A         B
+```
+
+我们希望AB这两个子序列能有公共前后缀，这样就不用重新匹配。事实上，f 前一位的 next数值表示前面存在两个一摸一样的序列（A和B）。
+
+如果再去找A的最长子序列，发现是1。所以是
+
+```
+(aafa) c (aafa) f
+ !           !
+```
+
+找到重复的元素了，所以对于next[f]，最长的公共前后缀是af。
+
+---
+
+初始化：第一位没有意义，因为按照前缀后缀定义，第一位没有前后缀。第一个求解的下标从 1 开始。
+
+now表示下一个要对比的元素/在next[x]之前的序列的最大长度。
+
+``` python
+def get_next(pattern):
+    next = [0]
+    x = 1
+    now = next[x-1]
+    
+    while x < len(pattern):
+        if pattern[x] == pattern[now]:
+            next.append(now+1)
+            now += 1
+            x += 1
+            
+        elif now:  # now > 0
+            now = next[now-1]
+            
+        else:
+            next.append(0)
+            x += 1
+    return next
+```
+
+#### 主匹配过程
+
+> 设主串名为text，子串为pattern，这里同样需要i和j指针，i对应主串位置初始为0，j对应字串位置初始为0，同时对主串和字串进行遍历操作，分为以下两种情况。
+>
+> 1.当text[i] == pattern[j]，i与j加一继续相同判断直到j到达pattern末尾匹配完毕，返回i - j，程序结束。
+>
+> 2.当text[i] != pattern[j]，此时需要用到next数组，j-1并查找对应next数组值，回退到该值位置，重新进行判断，相同则继续遍历直到j遍历到末尾，不相同继续回退到next[j-1]位置，这里需要留意，如果此时j = 0且两字符不相等，我们需要跳过当前text[i]再执行上述判断，如果i到达末尾说明text里面不包含pattern子串，返回-1，结束程序。
+
+两个指针分别指向两个字符串。指向target的指针可以一次性循环到头，只需要根据前缀表，变化 pattern 指针（**i**）。在这个过程中，有几种情况：
+
+1. i = 0，这时候匹配正常，就前进；不正常也不能回退（因为我们的next[0] = 0）
+2. i > 0，匹配正常前进；匹配不正常就回退，直到 i=0，或者匹配上了
+3. i = length(pattern)可以返回
+
+所以循环里的逻辑有几种：
+
+1. 应该回退的时候尽量回退，**直到不能回退或者匹配成功（所以这个逻辑必须放在2前面）**
+2. 判断当前能不能匹配上，能的话就前进
+3. 是否pattern全匹配完了（这个逻辑看起来可以放在最前面，也可以放在最后面，总之应该紧挨着2——但如果完全匹配的时候，两个指针都指向末尾，比如aaab & aab；这时候 指向主字符串的指针不会再前进，不会再循环，也就不会再经过这个逻辑。所以应该放在循环末尾）
+
+如果循环里没有return，那就return -1
+
 
 
 ## [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
@@ -246,6 +372,16 @@ data = [1,6,7,2,4,5,3]
 
 
 
+## [459. 重复的子字符串](https://leetcode.cn/problems/repeated-substring-pattern/)
+
+关键思路：如果一个字符串是重复的，比如`abaaba`，那将这个字符串x2，得到`abaabaabaaba`，其中必然存在这个字符串本身。所以如果`s in s+s`，就是真的——**前提是对s+s掐头去尾，不然就会找到自己。**
+
+可以用builtin in/find，也可以用KMP。
+
+**re 很慢！**
+
+
+
 ## [496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
 
 典型的单调栈问题，一方面用hashmap建立两个数组的联系，另一方面对于`nums2`使用单调栈（允许单调递减，或者相等）。
@@ -269,6 +405,19 @@ def func(nums: list[int]) -> list[int]:
         stk.append(j)
 
         return ans
+```
+
+
+
+## [541. 反转字符串 II](https://leetcode.cn/problems/reverse-string-ii/)
+
+**热知识：Python Slice 不会 Raise IndexError，所以可以放心大胆的越界。**
+
+``` python
+s = list(s)
+for i in range(0, len(s), 2*k):
+    s[i:i+k] = reversed(s[i:i+k])
+return "".join(s)
 ```
 
 
@@ -354,3 +503,4 @@ for hi, v_hi in enumerate(data):
 
 
 
+​	
