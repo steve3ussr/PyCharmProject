@@ -255,6 +255,37 @@ for hi, v_hi in enumerate(data):
 - 在循环一开始加入的时候，判断一下新加入的元素是否在需求之内——当前窗口，能cover住多少需求
 - 如果刚好能满足需求，说明这是一个局部最优解，才能更新答案
 
+## [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+常规BFS，每一层的结果添加到一个deque里。对每一层访问后，检查deque两端。
+
+```python
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        lst = deque([root])
+        level = deque()
+        while lst:
+            for i in range(len(lst)):
+                node = lst.popleft()
+                if node.left:
+                    lst.append(node.left)
+                    level.append(node.left.val)
+                else:
+                    level.append(None)
+                if node.right:
+                    lst.append(node.right)
+                    level.append(node.right.val)
+                else:
+                    level.append(None)
+
+            while level:
+                if level.popleft() != level.pop():
+                    return False
+        return True
+```
+
+
+
 ## [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
 
 参考文献：[代码随想录——环形列表II ](https://www.programmercarl.com/0142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.html#%E6%80%9D%E8%B7%AF)
